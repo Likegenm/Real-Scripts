@@ -1,14 +1,17 @@
--- ЧАСТЬ 1/6: Библиотека, сервисы и окно
+-- Загрузка библиотеки Rayfield
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+-- Services
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
 local Lighting = game:GetService("Lighting")
+local TweenService = game:GetService("TweenService")
 
 local LocalPlayer = Players.LocalPlayer
 
+-- Создание окна Rayfield с оранжевым фоном
 local Window = Rayfield:CreateWindow({
    Name = "likegenm Script",
    LoadingTitle = "Rayfield Interface Suite",
@@ -25,16 +28,16 @@ local Window = Rayfield:CreateWindow({
    },
    KeySystem = false,
    Theme = {
-      Background = Color3.fromRGB(255, 165, 0),
-      Glow = Color3.fromRGB(255, 140, 0),
-      Accent = Color3.fromRGB(255, 100, 0),
-      LightContrast = Color3.fromRGB(255, 180, 0),
-      DarkContrast = Color3.fromRGB(200, 100, 0),
-      TextColor = Color3.fromRGB(255, 255, 255)
+      Background = Color3.fromRGB(255, 165, 0), -- Оранжевый фон
+      Glow = Color3.fromRGB(255, 140, 0), -- Оранжевое свечение
+      Accent = Color3.fromRGB(255, 100, 0), -- Акцентный оранжевый
+      LightContrast = Color3.fromRGB(255, 180, 0), -- Светлый контраст
+      DarkContrast = Color3.fromRGB(200, 100, 0), -- Темный контраст
+      TextColor = Color3.fromRGB(255, 255, 255) -- Белый текст
    }
 })
 
--- Переменные
+-- Variables
 local InfJumpEnabled = false
 local InfJumpCooldown = 0.1
 local LastInfJumpTime = 0
