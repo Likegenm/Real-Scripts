@@ -142,3 +142,15 @@ while task.wait(0.01) do
 end
 
 --
+local workspace = game:GetService("Workspace")
+local player = game.Players.LocalPlayer
+
+while task.wait(0.01) do
+    local character = player.Character
+    if character then
+        local AM = character:FindFirstChild("AntiMove")
+        if AM then
+            AM:Destroy()
+        end
+    end
+end
