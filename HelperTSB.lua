@@ -98,3 +98,47 @@ RunService.Heartbeat:Connect(function()
     
     humanoidRootPart.Velocity = velocity
 end)
+
+--AntiFreeze
+local workspace = game:GetService("Workspace")
+local player = game.Players.LocalPlayer
+
+while task.wait(0.01) do
+    local character = player.Character
+    if character then
+        local freeze = character:FindFirstChild("Freeze")
+        if freeze then
+            freeze:Destroy()
+        end
+    end
+end
+
+--AntiSlow
+local workspace = game:GetService("Workspace")
+local player = game.Players.LocalPlayer
+
+while task.wait(0.01) do
+    local character = player.Character
+    if character then
+        local slowed = character:FindFirstChild("Slowed")
+        if slowed then
+            slowed:Destroy()
+        end
+    end
+end
+
+--AlwaysBlock
+local workspace = game:GetService("Workspace")
+local player = game.Players.LocalPlayer
+
+while task.wait(0.01) do
+    local character = player.Character
+    if character then
+        local NB = character:FindFirstChild("NoBlock")
+        if NB then
+            NB:Destroy()
+        end
+    end
+end
+
+--
