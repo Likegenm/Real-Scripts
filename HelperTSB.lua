@@ -154,3 +154,17 @@ while task.wait(0.01) do
         end
     end
 end
+
+--Anti Debris
+local workspace = game:GetService("Workspace")
+local player = game.Players.LocalPlayer
+
+while task.wait(0.01) do
+    local character = player.Character
+    if character then
+        local AD = character:FindFirstChild("Small Debris")
+        if AD then
+            AD:Destroy()
+        end
+    end
+end
