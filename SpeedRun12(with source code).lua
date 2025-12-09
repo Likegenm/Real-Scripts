@@ -8,8 +8,8 @@ local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
 local tweenInfo = TweenInfo.new(
-    10, -- продолжительность 3 секунды
-    Enum.EasingStyle.Linear, -- линейная анимация
+    10, -- or ur time
+    Enum.EasingStyle.Linear,
     Enum.EasingDirection.Out
 )
 
