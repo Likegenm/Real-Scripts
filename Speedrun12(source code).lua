@@ -62,7 +62,7 @@ teleportButton.MouseButton1Click:Connect(function()
         local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
         if humanoidRootPart then
             local tweenInfo = TweenInfo.new(
-                3,
+                3, --Time
                 Enum.EasingStyle.Linear,
                 Enum.EasingDirection.Out
             )
