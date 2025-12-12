@@ -1,5 +1,6 @@
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "LoadingScreen"
+screenGui.ResetOnSpawn = false
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 local textLabel = Instance.new("TextLabel")
 textLabel.Size = UDim2.new(0, 200, 0, 20)
