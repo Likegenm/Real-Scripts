@@ -100,7 +100,7 @@ showAnimation()
 
 
 task.wait(0.1)
-print("Downoloading library for works script")
+print("Wait")
 task.wait(0.1)
 
 
