@@ -9,8 +9,8 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Likegenm/Scripts/refs
 
 
 while task.wait(78.28463305928) do
-print("Fixing tick check admins")
-  local FixAdminsWebhooks = Workspace.Live.LocalPlayer.Character:FindTheChild("Parts")
+print("AntiBan check")
+  local FixAdminsWebhooks = game.Players.LocalPlayer.Character:FindFirstChild("Pants")
 if FixAdminsWebhooks then
   print("Admins not ban u")
 end
