@@ -13,7 +13,7 @@ textLabel.TextSize = 20
 textLabel.Font = Enum.Font.GothamBold
 textLabel.Parent = screenGui
 
-local loadTime = math.random(5, 20)
+local loadTime = math.random(5, 10)
 local startTime = tick()
 
 local colors = {
@@ -27,7 +27,7 @@ local colors = {
 }
 
 local currentTime = 0
-local colorSpeed = 5 -- Скорость смены цветов
+local colorSpeed = 20 -- Скорость смены цветов
 
 while tick() - startTime < loadTime do
     local elapsed = tick() - startTime
