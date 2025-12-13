@@ -5,6 +5,7 @@ local player = Players.LocalPlayer
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "TeleportGUI"
+gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
 local frame = Instance.new("Frame")
