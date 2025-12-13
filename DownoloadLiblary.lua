@@ -13,10 +13,9 @@ textLabel.TextSize = 20
 textLabel.Font = Enum.Font.GothamBold
 textLabel.Parent = screenGui
 
-local loadTime = math.random(10, 60)
+local loadTime = math.random(5, 20)
 local startTime = tick()
 
--- Радужные цвета
 local colors = {
     Color3.fromRGB(255, 0, 0),      -- Красный
     Color3.fromRGB(255, 127, 0),    -- Оранжевый
@@ -27,27 +26,28 @@ local colors = {
     Color3.fromRGB(148, 0, 211)     -- Фиолетовый
 }
 
-local colorIndex = 1
-local colorTransitionSpeed = 0.5
+local currentTime = 0
+local colorSpeed = 5 -- Скорость смены цветов
 
 while tick() - startTime < loadTime do
     local elapsed = tick() - startTime
     local percent = math.floor((elapsed / loadTime) * 100)
     textLabel.Text = "Wait " .. percent .. "%"
     
-    -- Радужная смена цвета
-    textLabel.TextColor3 = colors[colorIndex]
+    -- Плавный переход через все цвета радуги
+    currentTime = currentTime + colorSpeed * 0.1
+    local t = (math.sin(currentTime) + 1) / 2 -- от 0 до 1
     
-    colorIndex = colorIndex + 1
-    if colorIndex > #colors then
-        colorIndex = 1
-    end
+    local colorIndex1 = math.floor(currentTime % #colors) + 1
+    local colorIndex2 = (colorIndex1 % #colors) + 1
     
-    wait(colorTransitionSpeed)
+    textLabel.TextColor3 = colors[colorIndex1]:Lerp(colors[colorIndex2], t)
+    
+    wait(0.1)
 end
 
 textLabel.Text = "Wait 100%"
-textLabel.TextColor3 = Color3.fromRGB(0, 255, 0) -- Зеленый при 100%
+textLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
 
 local StarterGui = game:GetService("StarterGui")
 StarterGui:SetCore("SendNotification", {
