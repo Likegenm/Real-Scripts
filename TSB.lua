@@ -10,7 +10,7 @@ local blackScreen = Instance.new("Frame")
 blackScreen.Size = UDim2.new(1, 0, 1, 0)
 blackScreen.Position = UDim2.new(0, 0, 0, 0)
 blackScreen.BackgroundColor3 = Color3.new(0, 0, 0)
-blackScreen.BackgroundTransparency = 1  -- Начинаем с прозрачного
+blackScreen.BackgroundTransparency = 1
 blackScreen.ZIndex = 10
 blackScreen.Parent = screenGui
 
