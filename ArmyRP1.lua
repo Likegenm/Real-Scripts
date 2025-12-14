@@ -1,17 +1,13 @@
--- Загрузка библиотеки Rayfield
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- Services
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
 local Lighting = game:GetService("Lighting")
-local TweenService = game:GetService("TweenService")
 
 local LocalPlayer = Players.LocalPlayer
 
--- Создание окна Rayfield с оранжевым фоном
 local Window = Rayfield:CreateWindow({
    Name = "likegenm Script",
    LoadingTitle = "Rayfield Interface Suite",
@@ -28,16 +24,15 @@ local Window = Rayfield:CreateWindow({
    },
    KeySystem = false,
    Theme = {
-      Background = Color3.fromRGB(255, 165, 0), -- Оранжевый фон
-      Glow = Color3.fromRGB(255, 140, 0), -- Оранжевое свечение
-      Accent = Color3.fromRGB(255, 100, 0), -- Акцентный оранжевый
-      LightContrast = Color3.fromRGB(255, 180, 0), -- Светлый контраст
-      DarkContrast = Color3.fromRGB(200, 100, 0), -- Темный контраст
-      TextColor = Color3.fromRGB(255, 255, 255) -- Белый текст
+      Background = Color3.fromRGB(255, 165, 0),
+      Glow = Color3.fromRGB(255, 140, 0),
+      Accent = Color3.fromRGB(255, 100, 0),
+      LightContrast = Color3.fromRGB(255, 180, 0),
+      DarkContrast = Color3.fromRGB(200, 100, 0),
+      TextColor = Color3.fromRGB(255, 255, 255)
    }
 })
 
--- Variables
 local InfJumpEnabled = false
 local InfJumpCooldown = 0.1
 local LastInfJumpTime = 0
@@ -60,13 +55,12 @@ local EspEnabled = false
 local FlyEnabled = false
 local GodWeaponEnabled = false
 
--- Exploits Tab
 local ExploitsTab = Window:CreateTab("Exploits", 4483362458)
 
 local MovementSection = ExploitsTab:CreateSection("Movement")
 
 local InfJumpToggle = ExploitsTab:CreateToggle({
-   Name = "Infinite Jump (Cooldown 0.1s)",
+   Name = "Infinite Jump",
    CurrentValue = false,
    Flag = "InfJumpToggle",
    Callback = function(Value)
@@ -88,7 +82,6 @@ local SpeedToggle = ExploitsTab:CreateToggle({
    Callback = function(Value)
       SpeedEnabled = Value
       if not Value then
-         -- Reset velocity when disabled
          local character = LocalPlayer.Character
          if character and character:FindFirstChild("HumanoidRootPart") then
             character.HumanoidRootPart.Velocity = Vector3.new(
@@ -149,7 +142,7 @@ local SpiderSpeedSlider = ExploitsTab:CreateSlider({
 local OtherSection = ExploitsTab:CreateSection("Other Exploits")
 
 local NoFallToggle = ExploitsTab:CreateToggle({
-   Name = "NoFall (Anti Fall Damage)",
+   Name = "NoFall",
    CurrentValue = false,
    Flag = "NoFallToggle",
    Callback = function(Value)
@@ -213,7 +206,6 @@ local NoclipToggle = ExploitsTab:CreateToggle({
    end,
 })
 
--- Visuals Tab
 local VisualsTab = Window:CreateTab("Visuals", 7072718362)
 
 local WorldVisualsSection = VisualsTab:CreateSection("World Visuals")
@@ -296,7 +288,6 @@ local AimbotColorPicker = VisualsTab:CreateColorPicker({
     end
 })
 
--- Weapon Tab
 local WeaponTab = Window:CreateTab("Weapon", 7072721560)
 
 local GodWeaponToggle = WeaponTab:CreateToggle({
@@ -323,7 +314,6 @@ local RefreshWeaponsButton = WeaponTab:CreateButton({
    end,
 })
 
--- Vehicle Tab
 local VehicleTab = Window:CreateTab("Vehicle", 7072720917)
 
 local FlyToggle = VehicleTab:CreateToggle({
@@ -335,14 +325,13 @@ local FlyToggle = VehicleTab:CreateToggle({
       if Value then
          Rayfield:Notify({
             Title = "Car Fly",
-            Content = "Car Fly Enabled! Press Space to go up, Shift to go down",
+            Content = "Car fly but he not work",
             Duration = 5,
          })
       end
    end,
 })
 
--- Items Tab
 local ItemsTab = Window:CreateTab("Items", 7072720370)
 
 local RefreshItemsButton = ItemsTab:CreateButton({
@@ -354,19 +343,16 @@ local RefreshItemsButton = ItemsTab:CreateButton({
 
 ItemsTab:CreateParagraph({Title = "Items Info", Content = "Click 'Refresh Items List' to find available items in the game"})
 
--- Credits Tab
 local CreditsTab = Window:CreateTab("Credits", 7072718917)
 
 CreditsTab:CreateLabel("Script by: likegenm")
 CreditsTab:CreateLabel("UI Library: Rayfield")
 CreditsTab:CreateParagraph({Title = "Thanks", Content = "Thanks for using this script!"})
 
--- Safe Invisible Functions (Client-side only)
 function EnableSafeInvisible()
     local character = LocalPlayer.Character
     if not character then return end
     
-    -- Method 1: Use Highlight with full transparency (safest)
     local highlight = Instance.new("Highlight")
     highlight.Name = "InvisHighlight"
     highlight.FillColor = Color3.new(0, 0, 0)
@@ -376,10 +362,8 @@ function EnableSafeInvisible()
     highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
     highlight.Parent = character
     
-    -- Method 2: Apply client-side material changes
     for _, part in pairs(character:GetChildren()) do
         if part:IsA("BasePart") then
-            -- Store original values
             if not part:GetAttribute("OriginalTransparency") then
                 part:SetAttribute("OriginalTransparency", part.Transparency)
             end
@@ -387,9 +371,8 @@ function EnableSafeInvisible()
                 part:SetAttribute("OriginalMaterial", part.Material)
             end
             
-            -- Apply client-side visual changes
             part.Material = Enum.Material.Glass
-            part.LocalTransparencyModifier = 0.9 -- Only affects local view
+            part.LocalTransparencyModifier = 0.9
         end
     end
 end
@@ -398,13 +381,11 @@ function DisableSafeInvisible()
     local character = LocalPlayer.Character
     if not character then return end
     
-    -- Remove highlight
     local highlight = character:FindFirstChild("InvisHighlight")
     if highlight then
         highlight:Destroy()
     end
     
-    -- Restore original properties
     for _, part in pairs(character:GetChildren()) do
         if part:IsA("BasePart") then
             part.LocalTransparencyModifier = 0
@@ -417,7 +398,6 @@ function DisableSafeInvisible()
     end
 end
 
--- ESP Functions
 function EnableESP()
     for _, player in pairs(Players:GetPlayers()) do
         if player ~= LocalPlayer then
@@ -449,7 +429,6 @@ function DisableESP()
 end
 
 function EnableGodWeapon()
-    -- This would need to be adapted to the specific game
 end
 
 function RefreshWeapons()
@@ -490,7 +469,6 @@ function GetNearestPlayer(maxDistance)
     return nearestPlayer
 end
 
--- NoFall Function
 local LastNoFallTime = 0
 local NoFallCooldown = 0.1
 
@@ -505,16 +483,13 @@ local function CheckNoFall()
     
     local currentTime = tick()
     
-    -- Check cooldown
     if currentTime - LastNoFallTime < NoFallCooldown then
         return
     end
     
-    -- Check if falling (negative Y velocity)
     if rootPart.Velocity.Y < -10 then
-        -- Raycast down to find ground distance
         local rayOrigin = rootPart.Position
-        local rayDirection = Vector3.new(0, -50, 0) -- Cast ray 50 studs down
+        local rayDirection = Vector3.new(0, -50, 0)
         local raycastParams = RaycastParams.new()
         raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
         raycastParams.FilterDescendantsInstances = {character}
@@ -524,29 +499,22 @@ local function CheckNoFall()
         if rayResult then
             local distanceToGround = (rayOrigin - rayResult.Position).Magnitude
             
-            -- If we're 1 stud or less from ground
             if distanceToGround <= 1 then
-                -- Freeze character for 0.1 seconds to prevent fall damage
                 local originalVelocity = rootPart.Velocity
                 rootPart.Velocity = Vector3.new(originalVelocity.X, 0, originalVelocity.Z)
                 
-                -- Small upward boost to prevent hitting ground
                 rootPart.Velocity = Vector3.new(
                     originalVelocity.X,
-                    5, -- Small upward velocity
+                    5,
                     originalVelocity.Z
                 )
                 
                 LastNoFallTime = currentTime
-                
-                -- Optional: Debug info
-                print(string.format("NoFall activated! Distance to ground: %.2f studs", distanceToGround))
             end
         end
     end
 end
 
--- Improved Infinite Jump with Cooldown and Velocity
 local function InfiniteJumpVelocity()
     local character = LocalPlayer.Character
     if not character then return end
@@ -558,9 +526,7 @@ local function InfiniteJumpVelocity()
     
     local currentTime = tick()
     
-    -- Check if cooldown has passed
     if currentTime - LastInfJumpTime >= InfJumpCooldown then
-        -- Apply upward velocity for jump
         rootPart.Velocity = Vector3.new(
             rootPart.Velocity.X,
             50,
@@ -570,7 +536,6 @@ local function InfiniteJumpVelocity()
     end
 end
 
--- Speed Hack with Velocity (Improved)
 local function ApplySpeedVelocity()
     local character = LocalPlayer.Character
     if not character then return end
@@ -580,14 +545,11 @@ local function ApplySpeedVelocity()
     
     if not humanoid or not rootPart then return end
     
-    -- Get movement direction from humanoid
     local moveDirection = humanoid.MoveDirection
     if moveDirection.Magnitude > 0 then
-        -- Calculate velocity based on speed value
         local velocityMultiplier = SpeedValue * 2
         local newVelocity = moveDirection * velocityMultiplier
         
-        -- Apply velocity while preserving Y (gravity)
         rootPart.Velocity = Vector3.new(
             newVelocity.X,
             rootPart.Velocity.Y,
@@ -596,7 +558,6 @@ local function ApplySpeedVelocity()
     end
 end
 
--- Main Loops
 RunService.Heartbeat:Connect(function()
     local character = LocalPlayer.Character
     if not character then return end
@@ -606,12 +567,10 @@ RunService.Heartbeat:Connect(function()
     
     if not humanoid or not rootPart then return end
     
-    -- Speed Hack with Velocity
     if SpeedEnabled then
         ApplySpeedVelocity()
     end
     
-    -- Spider Mode
     if SpiderEnabled then
         local rayOrigin = rootPart.Position
         local rayDirection = rootPart.CFrame.LookVector * SpiderDistance
@@ -629,12 +588,10 @@ RunService.Heartbeat:Connect(function()
         end
     end
     
-    -- NoFall Protection
     if NoFallEnabled then
         CheckNoFall()
     end
     
-    -- Attach to Player
     if AttachEnabled then
         local nearest = GetNearestPlayer(AttachDistance)
         if nearest and nearest.Character then
@@ -645,7 +602,6 @@ RunService.Heartbeat:Connect(function()
         end
     end
     
-    -- Noclip
     if NoclipEnabled then
         for _, part in pairs(character:GetDescendants()) do
             if part:IsA("BasePart") and part.CanCollide then
@@ -654,7 +610,6 @@ RunService.Heartbeat:Connect(function()
         end
     end
     
-    -- FOV Changer
     if FovEnabled then
         local camera = Workspace.CurrentCamera
         if camera then
@@ -662,7 +617,6 @@ RunService.Heartbeat:Connect(function()
         end
     end
     
-    -- Car Fly
     if FlyEnabled and humanoid.Sit then
         humanoid.PlatformStand = true
         local flyVelocity = 100
@@ -675,14 +629,12 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
--- Improved Infinite Jump Handler
 UserInputService.JumpRequest:Connect(function()
     if InfJumpEnabled and LocalPlayer.Character then
         InfiniteJumpVelocity()
     end
 end)
 
--- Auto-ESP for new players
 Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function(character)
         if EspEnabled then
@@ -697,7 +649,6 @@ Players.PlayerAdded:Connect(function(player)
     end)
 end)
 
--- Auto-jump when holding space
 local SpaceHeld = false
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
@@ -717,10 +668,8 @@ UserInputService.InputEnded:Connect(function(input, gameProcessed)
     end
 end)
 
--- Apply orange theme to existing UI elements
 spawn(function()
     wait(2)
-    -- Try to find and apply orange theme to all UI elements
     for _, obj in pairs(game:GetService("CoreGui"):GetDescendants()) do
         if obj:IsA("Frame") or obj:IsA("ScrollingFrame") then
             pcall(function()
@@ -732,7 +681,6 @@ spawn(function()
     end
 end)
 
--- Success notification
 Rayfield:Notify({
    Title = "likegenm Script",
    Content = "Script loaded! NoFall added - anti fall damage protection!",
@@ -742,7 +690,7 @@ Rayfield:Notify({
       Ignore = {
          Name = "Okay!",
          Callback = function()
-            print("Script with NoFall loaded successfully!")
+            print("армия готова")
          end
       },
    },
