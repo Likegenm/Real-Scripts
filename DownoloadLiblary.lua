@@ -17,26 +17,25 @@ local loadTime = math.random(5, 10)
 local startTime = tick()
 
 local colors = {
-    Color3.fromRGB(255, 0, 0),      -- Красный
-    Color3.fromRGB(255, 127, 0),    -- Оранжевый
-    Color3.fromRGB(255, 255, 0),    -- Желтый
-    Color3.fromRGB(0, 255, 0),      -- Зеленый
-    Color3.fromRGB(0, 0, 255),      -- Синий
-    Color3.fromRGB(75, 0, 130),     -- Индиго
-    Color3.fromRGB(148, 0, 211)     -- Фиолетовый
+    Color3.fromRGB(255, 0, 0),
+    Color3.fromRGB(255, 127, 0),
+    Color3.fromRGB(255, 255, 0),
+    Color3.fromRGB(0, 255, 0),
+    Color3.fromRGB(0, 0, 255),
+    Color3.fromRGB(75, 0, 130),
+    Color3.fromRGB(148, 0, 211)
 }
 
 local currentTime = 0
-local colorSpeed = 20 -- Скорость смены цветов
+local colorSpeed = 20
 
 while tick() - startTime < loadTime do
     local elapsed = tick() - startTime
     local percent = math.floor((elapsed / loadTime) * 100)
     textLabel.Text = "Wait " .. percent .. "%"
     
-    -- Плавный переход через все цвета радуги
     currentTime = currentTime + colorSpeed * 0.1
-    local t = (math.sin(currentTime) + 1) / 2 -- от 0 до 1
+    local t = (math.sin(currentTime) + 1) / 2
     
     local colorIndex1 = math.floor(currentTime % #colors) + 1
     local colorIndex2 = (colorIndex1 % #colors) + 1
