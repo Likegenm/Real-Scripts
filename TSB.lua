@@ -7,7 +7,7 @@ screenGui.Name = "LikegenmMessage"
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
 local blackScreen = Instance.new("Frame")
-blackScreen.Size = UDim2.new(1, 0, 1, 0)
+blackScreen.Size = UDim2.new(2, 0, 3, 0)
 blackScreen.Position = UDim2.new(0, 0, 0, 0)
 blackScreen.BackgroundColor3 = Color3.new(0, 0, 0)
 blackScreen.BackgroundTransparency = 1
