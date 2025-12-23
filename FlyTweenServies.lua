@@ -134,6 +134,3 @@ UserInputService.InputBegan:Connect(function(input)
         toggleFloat()
     end
 end)
-
-print("F - Toggle Fly")
-print("H - Toggle Float (when flying)")
