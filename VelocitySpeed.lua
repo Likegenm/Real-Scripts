@@ -1,3 +1,5 @@
+local Speed = 50 -- speed
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -30,9 +32,9 @@ RunService.Heartbeat:Connect(function()
         end
         if mv.Magnitude > 0 then
             game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(
-                mv.Unit.X * 30, -- x speed
+                mv.Unit.X * speed,
                 game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity.Y,
-                mv.Unit.Z * 30 -- z speed
+                mv.Unit.Z * speed
             )
         end
     end
