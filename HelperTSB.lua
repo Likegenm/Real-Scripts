@@ -3,11 +3,18 @@
 --THIS IS NOT SCRIPT TSB!!!!!!!
 
 --Script platforma Tsb:
---        https://github.com/Likegenm/Scripts/blob/main/PlatformTSB.lua
-
-
-
---LocalPlayer
+local plr = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+local p = Instance.new("Part")
+p.Name = "Part"
+p.Shape = Enum.PartType.Ball
+p.Size = Vector3.new(100, 3, 100)
+p.Position = (plr.X, -499, plr.Z)
+p.Color = Color3.fromHex("#000000")
+p.Transparency = 0.65
+p.Parent = Workspace
+  
+  
+  --LocalPlayer
 
 --Speedhack(walkspeed):
 while true do
@@ -168,3 +175,4 @@ while task.wait(0.01) do
         end
     end
 end
+
