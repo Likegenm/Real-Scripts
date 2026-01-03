@@ -1,8 +1,10 @@
-local speed = 50 -- speed
+-- PC
+local speed = 50 -- скорость
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
+local Camera = workspace.CurrentCamera
 
 local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
@@ -16,25 +18,31 @@ LocalPlayer.CharacterAdded:Connect(function(newCharacter)
 end)
 
 RunService.Heartbeat:Connect(function()
-    if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        local mv = Vector3.new(0,0,0)
+    if Character and HumanoidRootPart then
+        local cameraCFrame = Camera.CFrame
+        local lookVector = cameraCFrame.LookVector
+        local rightVector = cameraCFrame.RightVector
+        
+        local mv = Vector3.new(0, 0, 0)
+
         if UserInputService:IsKeyDown(Enum.KeyCode.W) then
-            mv = mv + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.LookVector
+            mv = mv + Vector3.new(lookVector.X, 0, lookVector.Z).Unit
         end
         if UserInputService:IsKeyDown(Enum.KeyCode.S) then
-            mv = mv - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.LookVector
+            mv = mv - Vector3.new(lookVector.X, 0, lookVector.Z).Unit
         end
         if UserInputService:IsKeyDown(Enum.KeyCode.A) then
-            mv = mv - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.RightVector
+            mv = mv - Vector3.new(rightVector.X, 0, rightVector.Z).Unit
         end
         if UserInputService:IsKeyDown(Enum.KeyCode.D) then
-            mv = mv + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.RightVector
+            mv = mv + Vector3.new(rightVector.X, 0, rightVector.Z).Unit
         end
+        
         if mv.Magnitude > 0 then
-            game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(
-                mv.Unit.X * speed,
-                game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity.Y,
-                mv.Unit.Z * speed
+            HumanoidRootPart.Velocity = Vector3.new(
+                mv.X * speed,
+                HumanoidRootPart.Velocity.Y,
+                mv.Z * speed
             )
         end
     end
