@@ -1,3 +1,8 @@
 Main:Likegenm
-main scripter:Pepel0chek
-second scripter: likegenm
+Second scripter:nil
+Sounds:nil
+Animastions:nil
+Third scripter:nil
+Tester:Likegenm
+Libs:WindUI,RayField,Obsidian,Lin
+GUI helper:nil
