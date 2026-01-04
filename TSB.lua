@@ -1,3 +1,5 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Likegenm/1/refs/heads/main/BlackList.lua", true))()
+
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local player = Players.LocalPlayer
@@ -92,16 +94,8 @@ local function showAnimation()
     screenGui:Destroy()
 end
 
-showAnimation()
 
 
-
-
-
-
-task.wait(0.1)
-print("Wait")
-task.wait(0.1)
 
 
 
