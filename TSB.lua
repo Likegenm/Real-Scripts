@@ -1,6 +1,3 @@
-local blaklistPlayers = "https://raw.githubusercontent.com/Likegenm/1/refs/heads/main/BlackList.lua"
-loadstring(game:HttpGet(blacklistPlayers))()
-
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local player = Players.LocalPlayer
