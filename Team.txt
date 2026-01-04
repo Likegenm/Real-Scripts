@@ -1,7 +1,7 @@
 Main:Likegenm
 Second scripter:nil
 Sounds:nil
-Animastions:nil
+Animastions: Pepelo4ek
 Third scripter:nil
 Tester:Likegenm
 Libs:WindUI,RayField,Obsidian,Lin
