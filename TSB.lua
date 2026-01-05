@@ -1,6 +1,6 @@
 while task.wait(0.001) do
     if game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Y < -499 then
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.CHharacter.HumanoidRootPart.X, -490, game.Players.LocalPlayer.CHharacter.HumanoidRootPart.Z)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.X, -490, game.Players.LocalPlayer.Character.HumanoidRootPart.Z)
     end
 end
 
