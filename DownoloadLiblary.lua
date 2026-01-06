@@ -13,7 +13,7 @@ textLabel.TextSize = 20
 textLabel.Font = Enum.Font.GothamBold
 textLabel.Parent = screenGui
 
-local loadTime = math.random(5, 10)
+local loadTime = math.random(1, 5)
 local startTime = tick()
 
 local colors = {
@@ -55,5 +55,4 @@ StarterGui:SetCore("SendNotification", {
     Duration = 3
 })
 
-wait(1)
 screenGui:Destroy()
