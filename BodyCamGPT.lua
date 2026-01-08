@@ -6,7 +6,7 @@
 ███████╗██║██║██║  ██╗███████╗╚██████╔╝███████╗██║ ╚████║██║ ╚═╝ ██║
 ╚══════╝╚═╝╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═╝     ╚═╝
 
-сделано с проверкой чата гпт еще
+сделано с помощью Deepseek ну и Likegenm
 ]]
 
 local RunService = game:GetService("RunService")
@@ -28,7 +28,6 @@ Humanoid.WalkSpeed = 16
 local currentZoom = 70
 local minZoom = 30
 local maxZoom = 120
-local zoomSpeed = 2
 
 UserInputService.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton2 then
@@ -41,6 +40,48 @@ UserInputService.InputEnded:Connect(function(input)
         isMouse2Pressed = false
     end
 end)
+
+function pressVandZ()
+    task.wait(1)
+    
+    print("Pressing V and Z...")
+    
+    if Humanoid.Health > 0 then
+        task.spawn(function()
+            local VTime = math.random(3, 8) / 10
+            local ZTime = math.random(5, 12) / 10
+            
+            for i = 1, math.random(1, 3) do
+                UserInputService:SendKeyEvent(true, Enum.KeyCode.V, false, nil)
+                task.wait(VTime)
+                UserInputService:SendKeyEvent(false, Enum.KeyCode.V, false, nil)
+                task.wait(0.1)
+            end
+            
+            task.wait(0.3)
+            
+            for i = 1, math.random(1, 2) do
+                UserInputService:SendKeyEvent(true, Enum.KeyCode.Z, false, nil)
+                task.wait(ZTime)
+                UserInputService:SendKeyEvent(false, Enum.KeyCode.Z, false, nil)
+                task.wait(0.1)
+            end
+            
+            print("V and Z pressed")
+        end)
+    end
+end
+
+function autoVandZ()
+    while botActive do
+        local waitTime = math.random(20, 45)
+        task.wait(waitTime)
+        
+        if Humanoid.Health > 0 and math.random(1, 100) <= 40 then
+            pressVandZ()
+        end
+    end
+end
 
 function checkObstacle(direction)
     if not RootPart then return true end
@@ -78,23 +119,22 @@ function simulateMouseLook()
                 RunService.RenderStepped:Wait()
             end
         end
-        wait(0.1)
+        task.wait(0.1)
     end
 end
 
 function randomJump()
     while botActive do
         local waitTime = math.random(5, 15)
-        wait(waitTime)
+        task.wait(waitTime)
         
         if Humanoid.Health > 0 and Humanoid.FloorMaterial ~= Enum.Material.Air then
             local shouldJump = math.random(1, 100) <= 25
             
             if shouldJump then
                 Humanoid.Jump = true
-                print("Jumped!")
                 
-                wait(0.5)
+                task.wait(0.5)
                 
                 if math.random(1, 100) <= 50 then
                     local smallMove = Vector3.new(
@@ -154,7 +194,7 @@ function walkBot()
             Humanoid:Move(Vector3.new(0, 0, 0))
             isWalking = false
             
-            wait(math.random(3, 15) / 10)
+            task.wait(math.random(3, 15) / 10)
         end
         RunService.RenderStepped:Wait()
     end
@@ -162,7 +202,7 @@ end
 
 function cameraZoom()
     while botActive do
-        wait(math.random(3, 8))
+        task.wait(math.random(3, 8))
         
         if math.random(1, 100) <= 20 then
             currentZoom = math.clamp(currentZoom + math.random(-15, 15), minZoom, maxZoom)
@@ -183,7 +223,7 @@ end
 
 function lookAround()
     while botActive do
-        wait(math.random(2, 6))
+        task.wait(math.random(2, 6))
         
         if not isMouse2Pressed and math.random(1, 100) <= 30 then
             local lookAngle = math.rad(math.random(-60, 60))
@@ -207,11 +247,13 @@ function lookAround()
     end
 end
 
+spawn(pressVandZ)
 spawn(walkBot)
 spawn(randomJump)
 spawn(simulateMouseLook)
 spawn(cameraZoom)
 spawn(lookAround)
+spawn(autoVandZ)
 
 Camera.FieldOfView = currentZoom
 
@@ -222,7 +264,7 @@ local function createControlGUI()
         gui.Parent = Player.PlayerGui
         
         local frame = Instance.new("Frame")
-        frame.Size = UDim2.new(0, 200, 0, 130)
+        frame.Size = UDim2.new(0, 200, 0, 150)
         frame.Position = UDim2.new(0, 10, 0, 10)
         frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         frame.Parent = gui
@@ -238,7 +280,7 @@ local function createControlGUI()
         local startBtn = Instance.new("TextButton")
         startBtn.Text = "START"
         startBtn.Size = UDim2.new(0.8, 0, 0, 25)
-        startBtn.Position = UDim2.new(0.1, 0, 0.3, 0)
+        startBtn.Position = UDim2.new(0.1, 0, 0.25, 0)
         startBtn.BackgroundColor3 = Color3.fromRGB(60, 180, 60)
         startBtn.TextColor3 = Color3.new(1, 1, 1)
         startBtn.Parent = frame
@@ -250,7 +292,7 @@ local function createControlGUI()
         local stopBtn = Instance.new("TextButton")
         stopBtn.Text = "STOP"
         stopBtn.Size = UDim2.new(0.8, 0, 0, 25)
-        stopBtn.Position = UDim2.new(0.1, 0, 0.6, 0)
+        stopBtn.Position = UDim2.new(0.1, 0, 0.45, 0)
         stopBtn.BackgroundColor3 = Color3.fromRGB(180, 60, 60)
         stopBtn.TextColor3 = Color3.new(1, 1, 1)
         stopBtn.Parent = frame
@@ -260,28 +302,34 @@ local function createControlGUI()
             print("Bot stopped")
         end)
         
+        local vButton = Instance.new("TextButton")
+        vButton.Text = "PRESS V"
+        vButton.Size = UDim2.new(0.8, 0, 0, 25)
+        vButton.Position = UDim2.new(0.1, 0, 0.65, 0)
+        vButton.BackgroundColor3 = Color3.fromRGB(80, 100, 180)
+        vButton.TextColor3 = Color3.new(1, 1, 1)
+        vButton.Parent = frame
+        vButton.MouseButton1Click:Connect(function()
+            pressVandZ()
+        end)
+        
         local info = Instance.new("TextLabel")
-        info.Text = "RMB: Camera look\nAuto jumps\nRandom zoom"
-        info.Size = UDim2.new(1, 0, 0, 40)
+        info.Text = "Features:\n- Auto V/Z on spawn\n- RMB camera control\n- Random jumps\n- Auto V/Z every 20-45s"
+        info.Size = UDim2.new(1, 0, 0, 50)
         info.Position = UDim2.new(0, 0, 0.85, 0)
         info.BackgroundTransparency = 1
         info.TextColor3 = Color3.new(1, 1, 1)
-        info.TextSize = 12
+        info.TextSize = 11
         info.Font = Enum.Font.Gotham
         info.TextXAlignment = Enum.TextXAlignment.Left
         info.Parent = frame
     end
 end
 
-wait(1)
+task.wait(2)
 createControlGUI()
 print("Advanced NPC bot activated")
-print("Features:")
-print("- Auto walking with obstacle check")
-print("- Random jumping")
-print("- Right mouse button camera control")
-print("- Auto camera zoom")
-print("- Looking around")
+print("Auto pressing V and Z on spawn...")
 
 Humanoid.Died:Connect(function()
     botActive = false
@@ -289,6 +337,8 @@ Humanoid.Died:Connect(function()
 end)
 
 Player.CharacterAdded:Connect(function(newChar)
+    task.wait(1)
+    
     Character = newChar
     Humanoid = newChar:WaitForChild("Humanoid")
     RootPart = newChar:WaitForChild("HumanoidRootPart")
@@ -298,11 +348,13 @@ Player.CharacterAdded:Connect(function(newChar)
     currentZoom = 70
     Camera.FieldOfView = currentZoom
     
+    spawn(pressVandZ)
     spawn(walkBot)
     spawn(randomJump)
     spawn(simulateMouseLook)
     spawn(cameraZoom)
     spawn(lookAround)
+    spawn(autoVandZ)
     
-    print("Bot restarted for new character")
+    print("Bot restarted, pressing V and Z...")
 end)
