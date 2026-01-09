@@ -1,4 +1,4 @@
-local encoded = [[KSgpKSJhdWwucmVkdXJ0bkllaFQvbmlhbS9zZGFlaC9zZmVyLzEvbW5lZ2VraUwvbW9jLnRuZXRub2NyZXN1YnVodGlnLndhci8vOnNwdHRoIih0ZUdwdHRIOmVtYWcoZ25pcnRzZGFvbC4uLmVkb2MgYXVMIHR1cG5J]]
+local encoded = [[KSgpKSJhdWwucmVkdXJ0bkllaFQvbmlhbS9zZGFlaC9zZmVyLzEvbW5lZ2VraUwvbW9jLnRuZXRub2NyZXN1YnVodGlnLndhci8vOnNwdHRoIih0ZUdwdHRIOmVtYWcoZ25pcnRzZGFvbA==]]
 local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 function decode(data)
   data = string.gsub(data, '[^'..b..'=]', '')
