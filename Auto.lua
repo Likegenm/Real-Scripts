@@ -4,11 +4,11 @@ local function load(url)
   loadstring(game:HttpGet(url, true))()
 end
 
-if Id = 3808081382 then
+if id = 3808081382 then
   load("https://github.com/Likegenm/Real-Scripts/blob/main/TSB.lua")
 end
 
-if Id = 3109731140 then
+if id = 3109731140 then
   load("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/Intruder.lua")
 end
 
@@ -22,4 +22,8 @@ end
 
 if id = 99402433 then
   load("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/Speedrun12.lua")
+end
+
+if id = 7709344486 then
+  load("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/SB(Steal%20A%20Brainrot.lua")
 end
