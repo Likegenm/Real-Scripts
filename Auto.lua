@@ -27,3 +27,11 @@ end
 if id = 7709344486 then
   load("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/SB(Steal%20A%20Brainrot.lua")
 end
+
+if id = 6699967032 then
+  load("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/The%20Field.lua")
+end
+
+if id = 6280758286 then
+  load("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/ArmyRp.lua")
+end
