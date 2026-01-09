@@ -19,3 +19,7 @@ end
 if id = 1742264997 then
   load("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/ScpRP.lua")
 end
+
+if id = 99402433 then
+  load("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/Speedrun12.lua")
+end
