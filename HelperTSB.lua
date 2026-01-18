@@ -1,3 +1,4 @@
+--[[
 --This is Highlights for future creators
 
 --THIS IS NOT SCRIPT TSB!!!!!!!
@@ -176,3 +177,4 @@ while task.wait(0.01) do
     end
 end
 
+]]
