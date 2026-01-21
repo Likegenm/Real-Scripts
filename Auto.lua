@@ -29,3 +29,9 @@ end
 if game.gameId == 6280758286 then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/ArmyRp.lua", true))()
 end
+
+if game.gameId == 1489026993 then
+    loadstring(game:Httpget("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/SK.lua", true))()
+end
+
+
