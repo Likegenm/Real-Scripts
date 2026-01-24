@@ -34,4 +34,10 @@ if game.gameId == 1489026993 then
     loadstring(game:Httpget("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/SK.lua", true))()
 end
 
+if game.gameId == 4777817887 then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/BladeBall.lua"))()
+end
 
+if game.gameId == 1934496708 then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/ScpProject.lua"))()
+end
