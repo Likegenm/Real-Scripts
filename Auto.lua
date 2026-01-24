@@ -1,5 +1,5 @@
 if game.gameId == 3808081382 then
-    loadstring(game:HttpGet("https://github.com/Likegenm/Real-Scripts/blob/main/TSB.lua", true))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/TSB.lua", true))()
 end
 
 if game.gameId == 3109731140 then
