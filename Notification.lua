@@ -1,4 +1,25 @@
-local Notification = function(title, message, style, buttons)
+local DataStoreService = game:GetService("DataStoreService")
+local acceptedDS = DataStoreService:GetDataStore("NotificationAccepted")
+local player = game:GetService("Players").LocalPlayer
+
+local function hasAccepted()
+    local success, value = pcall(function()
+        return acceptedDS:GetAsync(player.UserId)
+    end)
+    return success and value == true
+end
+
+local function setAccepted()
+    pcall(function()
+        acceptedDS:SetAsync(player.UserId, true)
+    end)
+end
+
+local Notification = function(title, message, style, buttons, saveAccept)
+    if saveAccept and hasAccepted() then
+        return -- Не показываем если уже принимал
+    end
+    
     local Player = game:GetService("Players").LocalPlayer
     local Gui = Player:FindFirstChildOfClass("PlayerGui") or Player:WaitForChild("PlayerGui")
     
@@ -99,6 +120,9 @@ local Notification = function(title, message, style, buttons)
                 if buttonData.Callback then
                     buttonData.Callback()
                 end
+                if saveAccept and i == 1 then
+                    setAccepted()
+                end
                 ScreenGui:Destroy()
             end)
         end
@@ -120,6 +144,9 @@ local Notification = function(title, message, style, buttons)
         ButtonCorner.Parent = CloseButton
         
         CloseButton.MouseButton1Click:Connect(function()
+            if saveAccept then
+                setAccepted()
+            end
             ScreenGui:Destroy()
         end)
     end
@@ -141,30 +168,36 @@ local Notification = function(title, message, style, buttons)
     end
 end
 
-Notification("Warning", "Likegenm scripts", "warning", {
-    {
-        Text = "I ACCEPT",
-        Color = Color3.fromRGB(255, 180, 60),
-        Callback = function()
-            print("Terms accepted")
-        end
-    },
-    {
-        Text = "DECLINE",
-        Color = Color3.fromRGB(255, 60, 60),
-        Callback = function()
-            game.Players.LocalPlayer:Kick("Kick :)")
-        end
-    },
-    {
-        Text = "Privacy policy",
-        Color = Color3.fromRGB(60, 150, 255),
-        Callback = function()
-            if setclipboard then
-                setclipboard("https://github.com/Likegenm/Real-Scripts/blob/main/README.md")
-            else
-                print("https://github.com/Likegenm/Real-Scripts/blob/main/README.md")
+-- Пример использования с сохранением
+if not hasAccepted() then
+    Notification("Warning", "Likegenm scripts", "warning", {
+        {
+            Text = "I ACCEPT",
+            Color = Color3.fromRGB(255, 180, 60),
+            Callback = function()
+                print("Terms accepted")
             end
-        end
-    }
-})
+        },
+        {
+            Text = "DECLINE",
+            Color = Color3.fromRGB(255, 60, 60),
+            Callback = function()
+                game.Players.LocalPlayer:Kick("Kick :)")
+            end
+        },
+        {
+            Text = "Privacy policy",
+            Color = Color3.fromRGB(60, 150, 255),
+            Callback = function()
+                if setclipboard then
+                    setclipboard("https://github.com/Likegenm/Real-Scripts/blob/main/README.md")
+                else
+                    print("https://github.com/Likegenm/Real-Scripts/blob/main/README.md")
+                end
+            end
+        }
+    }, true) -- для меня это чтобы сохранялась
+end
+
+-- Обычное уведомление без сохранения
+Notification("Info", "Script loaded!", "info", nil, false)
