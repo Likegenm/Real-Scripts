@@ -146,20 +146,25 @@ Notification("Warning", "Likegenm scripts", "warning", {
         Text = "I ACCEPT",
         Color = Color3.fromRGB(255, 180, 60),
         Callback = function()
-            print("Ok")
+            print("Terms accepted")
         end
     },
     {
         Text = "DECLINE",
         Color = Color3.fromRGB(255, 60, 60),
         Callback = function()
-            game.Players.LocalPlayer:Kick("Kick :)"
+            game.Players.LocalPlayer:Kick("Kick :)")
         end
     },
-      {
-         Text = "Privacy policy",
-        Color = Color3.fromRGB(255, 180, 60),
+    {
+        Text = "Privacy policy",
+        Color = Color3.fromRGB(60, 150, 255),
         Callback = function()
-            setcliapboard("https://github.com/Likegenm/Real-Scripts/blob/main/README.md")
+            if setclipboard then
+                setclipboard("https://github.com/Likegenm/Real-Scripts/blob/main/README.md")
+            else
+                print("https://github.com/Likegenm/Real-Scripts/blob/main/README.md")
+            end
         end
+    }
 })
