@@ -1,5 +1,5 @@
 # BIO
-https://guns.lol/likegenm
+[![BIO Likegenm scripta](https://guns.lol/likegenm)
 
 # Privacy policy
 1. The owner is not responsible for your account
