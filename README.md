@@ -1,11 +1,7 @@
 # BIO
 https://guns.lol/likegenm
 
-# Version games
-MM2 1.0 (soon 2.0)
-TSB 1.2 (Always update)
-PSCP 1.0(soon 2.0)
-SCP RP 1.0 (not soon 2.0)
-SB (Steal a brainrot) 1.0 (soon 2.0)
-The intruder 1.0(home,mall,mine,mental,satan)
-Army RP 1.0 (not soon 2.0)
+# Privacy policy
+1. The owner is not responsible for your account
+2. I will not use scripts to interfere with other players (optional)
+3. I will not search for the owner's details, such as name, phone number, and address.
