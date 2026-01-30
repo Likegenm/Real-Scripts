@@ -199,5 +199,7 @@ if not hasAccepted() then
     }, true) -- для меня это чтобы сохранялась
 end
 
--- Обычное уведомление без сохранения
+--[[ Обычное уведомление без сохранения
 Notification("Info", "Script loaded!", "info", nil, false)
+]]
+
