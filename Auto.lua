@@ -41,3 +41,7 @@ end
 if game.gameId == 1934496708 then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/ScpProject.lua"))()
 end
+
+if game.gameId == 1116949753 then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/Isle.lua"))()
+end
