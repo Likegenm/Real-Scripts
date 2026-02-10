@@ -113,7 +113,7 @@ local function checkGame()
         [7709344486] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/SB(Steal%20A%20Brainrot.lua", "Steal A Brainrot"},
         [6699967032] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/The%20Field.lua", "The Field"},
         [6280758286] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/ArmyRp.lua", "Army Roleplay"},
-        [1489026993] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/SK.lua", "Super Kart"},
+        [1489026993] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/SK.lua", "Survive the Killer"},
         [4777817887] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/BladeBall.lua", "Blade Ball"},
         [1934496708] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/ScpProject.lua", "SCP Project"},
         [1116949753] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/Isle.lua", "The Isle"}
