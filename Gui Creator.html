@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox GUI Constructor Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #0a0a1a;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-bar {
+            background: #1a1a2e;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 2px solid #4facfe;
+            height: 60px;
+        }
+
+        .top-bar h1 {
+            color: #4facfe;
+            font-size: 1.5em;
+            margin-right: auto;
+        }
+
+        .top-bar button {
+            background: #4facfe;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .top-bar button:hover {
+            background: #00f2fe;
+            transform: scale(1.05);
+        }
+
+        .visibility-toggle {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: white;
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .left-panel {
+            width: 300px;
+            background: #1a1a2e;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 2px solid #4facfe;
+        }
+
+        .panel-section {
+            margin-bottom: 25px;
+        }
+
+        .panel-section h3 {
+            color: #4facfe;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #4facfe;
+            padding-bottom: 5px;
+        }
+
+        .gui-selector select {
+            width: 100%;
+            padding: 10px;
+            background: #0a0a1a;
+            color: white;
+            border: 1px solid #4facfe;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .gui-selector button {
+            width: 48%;
+            padding: 8px;
+            background: #4facfe;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 2%;
+        }
+
+        .element-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .element-btn {
+            background: #0a0a1a;
+            border: 1px solid #4facfe;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.2s;
+        }
+
+        .element-btn:hover {
+            background: #4facfe;
+            transform: translateX(5px);
+        }
+
+        .canvas-area {
+            flex: 1;
+            background: #0a0a1a;
+            position: relative;
+            overflow: auto;
+        }
+
+        .canvas {
+            background: rgba(255,255,255,0.05);
+            position: relative;
+            border: 2px dashed #4facfe;
+            margin: 20px auto;
+            box-shadow: 0 0 20px rgba(79,172,254,0.2);
+        }
+
+        .canvas.fullscreen {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0;
+        }
+
+        .gui-element {
+            background: rgba(79,172,254,0.2);
+            border: 2px solid #4facfe;
+            border-radius: 5px;
+            padding: 10px;
+            color: white;
+            cursor: move;
+            position: absolute;
+            user-select: none;
+            backdrop-filter: blur(5px);
+            min-width: 100px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gui-element.selected {
+            border-color: #ffaa00;
+            box-shadow: 0 0 15px #ffaa00;
+        }
+
+        .gui-element .element-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 12px;
+            cursor: move;
+            background: rgba(0,0,0,0.3);
+            padding: 3px 5px;
+            border-radius: 3px;
+        }
+
+        .gui-element .element-name {
+            font-weight: bold;
+            color: #4facfe;
+            cursor: pointer;
+        }
+
+        .gui-element .visibility-indicator {
+            cursor: pointer;
+            padding: 2px 5px;
+        }
+
+        .gui-element .content-area {
+            flex: 1;
+            position: relative;
+        }
+
+        .gui-element .movable-label {
+            position: absolute;
+            cursor: move;
+            background: rgba(255,255,255,0.1);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 11px;
+            border: 1px dashed #aaa;
+        }
+
+        .gui-element .movable-label.selected {
+            border-color: #ffaa00;
+            background: rgba(255,170,0,0.2);
+        }
+
+        .gui-element .movable-label .label-text {
+            cursor: text;
+        }
+
+        .gui-element button {
+            background: #4facfe;
+            border: none;
+            color: white;
+            padding: 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .gui-element input[type="range"] {
+            width: 100%;
+            margin: 5px 0;
+        }
+
+        .gui-element .toggle-switch {
+            width: 50px;
+            height: 24px;
+            background: #666;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .gui-element .toggle-switch.active {
+            background: #4facfe;
+        }
+
+        .gui-element .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: 0.2s;
+        }
+
+        .gui-element .toggle-switch.active::after {
+            transform: translateX(26px);
+        }
+
+        .right-panel {
+            width: 350px;
+            background: #1a1a2e;
+            padding: 20px;
+            overflow-y: auto;
+            border-left: 2px solid #4facfe;
+        }
+
+        .property-group {
+            margin-bottom: 20px;
+            background: #0a0a1a;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .property-group h4 {
+            color: #4facfe;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .property-group label {
+            display: block;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
+        .property-group input, .property-group select, .property-group textarea {
+            width: 100%;
+            padding: 8px;
+            background: #1a1a2e;
+            border: 1px solid #4facfe;
+            border-radius: 4px;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .property-group textarea {
+            font-family: monospace;
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .property-group .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .property-group .button-group button {
+            flex: 1;
+            padding: 8px;
+            background: #4facfe;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .property-group .button-group button.delete {
+            background: #f43b47;
+        }
+
+        .property-group .button-group button.success {
+            background: #00b09b;
+        }
+
+        .function-item {
+            background: #1a1a2e;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            border-left: 3px solid #4facfe;
+        }
+
+        .function-item .function-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .function-item .function-name {
+            font-weight: bold;
+            color: #4facfe;
+        }
+
+        .function-item .function-actions button {
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .function-item .function-actions button:hover {
+            color: white;
+        }
+
+        .function-item pre {
+            background: #0a0a1a;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #0f0;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        .context-menu {
+            position: fixed;
+            background: #1a1a2e;
+            border: 1px solid #4facfe;
+            border-radius: 5px;
+            padding: 5px;
+            z-index: 1000;
+            min-width: 200px;
+        }
+
+        .context-menu-item {
+            padding: 8px 15px;
+            color: white;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .context-menu-item:hover {
+            background: #4facfe;
+        }
+
+        .context-menu-item.delete:hover {
+            background: #f43b47;
+        }
+
+        .context-menu-divider {
+            height: 1px;
+            background: #4facfe;
+            margin: 5px 0;
+        }
+
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #4facfe;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            transform: translateX(400px);
+            transition: 0.3s;
+            z-index: 2000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success { background: #00b09b; }
+        .notification.error { background: #f43b47; }
+        .notification.warning { background: #ffaa00; }
+
+        .code-output {
+            position: fixed;
+            bottom: 20px;
+            left: 320px;
+            right: 370px;
+            background: #0a0a1a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #4facfe;
+        }
+
+        .code-output pre {
+            color: #0f0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 150px;
+            overflow-y: auto;
+            background: #000;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 11px;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .modal-content {
+            background: #1a1a2e;
+            border: 2px solid #4facfe;
+            border-radius: 10px;
+            padding: 20px;
+            width: 500px;
+            max-width: 90%;
+        }
+
+        .modal-content h3 {
+            color: #4facfe;
+            margin-bottom: 15px;
+        }
+
+        .modal-content input, .modal-content textarea {
+            width: 100%;
+            padding: 10px;
+            background: #0a0a1a;
+            border: 1px solid #4facfe;
+            border-radius: 5px;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .modal-content .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-content .modal-buttons button {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal-content .modal-buttons button.save {
+            background: #4facfe;
+            color: white;
+        }
+
+        .modal-content .modal-buttons button.cancel {
+            background: #666;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="top-bar">
+            <h1>Roblox GUI Constructor Pro</h1>
+            
+            <div class="visibility-toggle">
+                <input type="checkbox" id="global-visibility" checked onchange="toggleAllVisibility(this.checked)">
+                <label for="global-visibility">Show All</label>
+            </div>
+
+            <button onclick="newGUI()">New GUI</button>
+            <button onclick="duplicateGUI()">Duplicate</button>
+            <button onclick="renameGUI()">Rename</button>
+            <button onclick="deleteGUI()">Delete</button>
+            <button onclick="toggleFullscreen()">Fullscreen</button>
+            <button onclick="exportGUI()">Export</button>
+            <button onclick="importGUI()">Import</button>
+            <button onclick="copyLuaCode()">Copy Code</button>
+        </div>
+
+        <div class="main-container">
+            <div class="left-panel">
+                <div class="panel-section">
+                    <h3>GUI Selector</h3>
+                    <div class="gui-selector">
+                        <select id="gui-select" onchange="switchGUI(this.value)"></select>
+                        <button onclick="newGUI()">+ New</button>
+                        <button onclick="renameGUI()">Rename</button>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3>Elements</h3>
+                    <div class="element-list">
+                        <div class="element-btn" draggable="true" data-type="button" data-text="Button">Button</div>
+                        <div class="element-btn" draggable="true" data-type="slider" data-text="Slider">Slider</div>
+                        <div class="element-btn" draggable="true" data-type="toggle" data-text="Toggle">Toggle</div>
+                        <div class="element-btn" draggable="true" data-type="label" data-text="Label">Label</div>
+                        <div class="element-btn" draggable="true" data-type="frame" data-text="Frame">Frame</div>
+                        <div class="element-btn" draggable="true" data-type="textbox" data-text="Text Input">Text Input</div>
+                        <div class="element-btn" draggable="true" data-type="image" data-text="Image">Image</div>
+                        <div class="element-btn" draggable="true" data-type="list" data-text="List">List</div>
+                        <div class="element-btn" draggable="true" data-type="scrollingframe" data-text="Scrolling Frame">Scrolling Frame</div>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3>Quick Actions</h3>
+                    <div class="element-list">
+                        <div class="element-btn" onclick="alignElements('left')">Align Left</div>
+                        <div class="element-btn" onclick="alignElements('right')">Align Right</div>
+                        <div class="element-btn" onclick="alignElements('top')">Align Top</div>
+                        <div class="element-btn" onclick="alignElements('bottom')">Align Bottom</div>
+                        <div class="element-btn" onclick="distributeElements()">Distribute</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="canvas-area" id="canvas-area">
+                <div class="canvas" id="canvas" style="width: 1000px; height: 1000px;"></div>
+            </div>
+
+            <div class="right-panel" id="properties-panel">
+                <h3 style="color: #4facfe; margin-bottom: 15px;">Properties</h3>
+                <div id="property-editor">
+                    <p style="color: #aaa; text-align: center;">Select an element</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-output">
+            <pre id="lua-code"></pre>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let guis = {};
+        let currentGUI = 'gui1';
+        let selectedElement = null;
+        let selectedMovableLabel = null;
+        let elementId = 0;
+        let labelId = 0;
+        let contextMenu = null;
+        let isFullscreen = false;
+        let clipboard = null;
+        let history = [];
+        let historyIndex = -1;
+
+        guis['gui1'] = { 
+            name: 'Main GUI', 
+            elements: [], 
+            visible: true,
+            created: new Date().toISOString()
+        };
+
+        function showNotification(message, type = 'info') {
+            const n = document.getElementById('notification');
+            n.textContent = message;
+            n.className = `notification show ${type}`;
+            setTimeout(() => n.classList.remove('show'), 3000);
+        }
+
+        function addToHistory() {
+            if (historyIndex < history.length - 1) {
+                history = history.slice(0, historyIndex + 1);
+            }
+            history.push(JSON.parse(JSON.stringify(guis)));
+            historyIndex++;
+            if (history.length > 50) {
+                history.shift();
+                historyIndex--;
+            }
+        }
+
+        function undo() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                guis = JSON.parse(JSON.stringify(history[historyIndex]));
+                updateGUISelector();
+                renderCanvas();
+                showNotification('Undo', 'success');
+            }
+        }
+
+        function redo() {
+            if (historyIndex < history.length - 1) {
+                historyIndex++;
+                guis = JSON.parse(JSON.stringify(history[historyIndex]));
+                updateGUISelector();
+                renderCanvas();
+                showNotification('Redo', 'success');
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'z') {
+                e.preventDefault();
+                undo();
+            }
+            if (e.ctrlKey && e.key === 'y') {
+                e.preventDefault();
+                redo();
+            }
+            if (e.key === 'Delete' && selectedElement) {
+                deleteElement(selectedElement.id);
+            }
+        });
+
+        function updateGUISelector() {
+            const select = document.getElementById('gui-select');
+            select.innerHTML = '';
+            for (let id in guis) {
+                const opt = document.createElement('option');
+                opt.value = id;
+                opt.textContent = guis[id].name;
+                if (id === currentGUI) opt.selected = true;
+                select.appendChild(opt);
+            }
+        }
+
+        function newGUI() {
+            const name = prompt('GUI name:', 'New GUI');
+            if (!name) return;
+            const id = 'gui' + Date.now();
+            guis[id] = { name: name, elements: [], visible: true, created: new Date().toISOString() };
+            addToHistory();
+            updateGUISelector();
+            switchGUI(id);
+            showNotification('GUI created', 'success');
+        }
+
+        function duplicateGUI() {
+            const newId = 'gui' + Date.now();
+            guis[newId] = {
+                name: guis[currentGUI].name + ' Copy',
+                elements: JSON.parse(JSON.stringify(guis[currentGUI].elements.map(e => {
+                    const newEl = {...e, id: 'element_' + elementId++};
+                    if (newEl.labels) {
+                        newEl.labels = newEl.labels.map(l => ({...l, id: 'label_' + labelId++}));
+                    }
+                    return newEl;
+                }))),
+                visible: true,
+                created: new Date().toISOString()
+            };
+            addToHistory();
+            updateGUISelector();
+            switchGUI(newId);
+            showNotification('GUI duplicated', 'success');
+        }
+
+        function renameGUI() {
+            const newName = prompt('New name:', guis[currentGUI].name);
+            if (newName) {
+                guis[currentGUI].name = newName;
+                updateGUISelector();
+                addToHistory();
+                showNotification('Renamed', 'success');
+            }
+        }
+
+        function deleteGUI() {
+            if (Object.keys(guis).length < 2) {
+                showNotification('Cannot delete last GUI', 'error');
+                return;
+            }
+            if (!confirm('Delete this GUI?')) return;
+            delete guis[currentGUI];
+            currentGUI = Object.keys(guis)[0];
+            addToHistory();
+            updateGUISelector();
+            renderCanvas();
+            showNotification('GUI deleted', 'success');
+        }
+
+        function exportGUI() {
+            const data = JSON.stringify(guis[currentGUI], null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${guis[currentGUI].name}.json`;
+            a.click();
+            showNotification('GUI exported', 'success');
+        }
+
+        function importGUI() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const imported = JSON.parse(e.target.result);
+                        const id = 'gui' + Date.now();
+                        guis[id] = imported;
+                        addToHistory();
+                        updateGUISelector();
+                        switchGUI(id);
+                        showNotification('GUI imported', 'success');
+                    } catch (err) {
+                        showNotification('Invalid file', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        function switchGUI(id) {
+            currentGUI = id;
+            renderCanvas();
+            selectedElement = null;
+            selectedMovableLabel = null;
+            document.getElementById('property-editor').innerHTML = '<p style="color:#aaa; text-align:center;">Select an element</p>';
+        }
+
+        function toggleFullscreen() {
+            const canvas = document.getElementById('canvas');
+            isFullscreen = !isFullscreen;
+            canvas.classList.toggle('fullscreen');
+        }
+
+        function toggleAllVisibility(visible) {
+            guis[currentGUI].visible = visible;
+            document.querySelectorAll('.gui-element').forEach(el => {
+                el.style.display = visible ? 'flex' : 'none';
+            });
+            generateLuaCode();
+        }
+
+        function alignElements(direction) {
+            const elements = guis[currentGUI].elements;
+            if (elements.length < 2) return;
+
+            if (direction === 'left') {
+                const leftmost = Math.min(...elements.map(e => e.left));
+                elements.forEach(e => e.left = leftmost);
+            } else if (direction === 'right') {
+                const rightmost = Math.max(...elements.map(e => e.left + e.width));
+                elements.forEach(e => e.left = rightmost - e.width);
+            } else if (direction === 'top') {
+                const topmost = Math.min(...elements.map(e => e.top));
+                elements.forEach(e => e.top = topmost);
+            } else if (direction === 'bottom') {
+                const bottommost = Math.max(...elements.map(e => e.top + e.height));
+                elements.forEach(e => e.top = bottommost - e.height);
+            }
+
+            renderCanvas();
+            addToHistory();
+            showNotification(`Aligned ${direction}`, 'success');
+        }
+
+        function distributeElements() {
+            const elements = guis[currentGUI].elements;
+            if (elements.length < 3) return;
+
+            const sorted = [...elements].sort((a, b) => a.left - b.left);
+            const start = sorted[0].left;
+            const end = sorted[sorted.length - 1].left;
+            const step = (end - start) / (sorted.length - 1);
+
+            for (let i = 1; i < sorted.length - 1; i++) {
+                sorted[i].left = start + step * i;
+            }
+
+            renderCanvas();
+            addToHistory();
+            showNotification('Distributed', 'success');
+        }
+
+        function renderCanvas() {
+            const canvas = document.getElementById('canvas');
+            canvas.innerHTML = '';
+            guis[currentGUI].elements.forEach(el => {
+                const element = createElementFromData(el);
+                canvas.appendChild(element);
+                makeElementDraggable(element);
+                makeElementSelectable(element);
+                if (el.visible === false) element.style.display = 'none';
+            });
+        }
+
+        function createElementFromData(data) {
+            const el = document.createElement('div');
+            el.className = 'gui-element';
+            el.id = data.id;
+            el.setAttribute('data-type', data.type);
+            el.setAttribute('data-name', data.name || data.type);
+            el.setAttribute('data-visible', data.visible !== false);
+            
+            el.style.left = data.left + 'px';
+            el.style.top = data.top + 'px';
+            el.style.width = data.width + 'px';
+            el.style.height = data.height + 'px';
+            el.style.backgroundColor = data.color || 'rgba(79,172,254,0.2)';
+            
+            let header = `<div class="element-header">
+                <span class="element-name" onclick="selectElement('${data.id}')">${data.name || data.type}</span>
+                <span class="visibility-indicator" onclick="toggleElementVisibility('${data.id}')">${data.visible !== false ? '👁️' : '👁️‍🗨️'}</span>
+            </div>`;
+            
+            let content = `<div class="content-area" style="position:relative; min-height:50px;">`;
+            
+            switch(data.type) {
+                case 'button':
+                    content += `<button style="width:100%; padding:8px; background:#4facfe; border:none; color:white; border-radius:3px; cursor:pointer;">${data.text || 'Button'}</button>`;
+                    break;
+                case 'slider':
+                    content += `<input type="range" style="width:100%" value="${data.value || 50}" min="${data.min || 0}" max="${data.max || 100}"><div style="text-align:center;">${data.value || 50}</div>`;
+                    break;
+                case 'toggle':
+                    content += `<div class="toggle-switch ${data.active ? 'active' : ''}" onclick="this.classList.toggle('active')"></div><div style="text-align:center;">${data.active ? 'On' : 'Off'}</div>`;
+                    break;
+                case 'label':
+                    content += `<div style="padding:5px;">${data.text || 'Label'}</div>`;
+                    break;
+                case 'frame':
+                    content += `<div style="padding:10px; min-height:50px;">${data.text || 'Frame Content'}</div>`;
+                    break;
+                case 'textbox':
+                    content += `<input type="text" placeholder="${data.placeholder || 'Enter text...'}" style="width:100%; padding:8px; background:#1a1a2e; border:1px solid #4facfe; color:white; border-radius:3px;">`;
+                    break;
+                case 'image':
+                    content += `<div style="background:#333; width:100%; height:70%; display:flex; align-items:center; justify-content:center; border-radius:3px;">🖼️ ${data.imageId || 'Image'}</div>`;
+                    break;
+                case 'list':
+                    content += `<div style="background:#1a1a2e; border:1px solid #4facfe; border-radius:3px;">
+                        ${data.items ? data.items.map(item => `<div style="padding:5px; border-bottom:1px solid #4facfe;">${item}</div>`).join('') : '<div style="padding:5px;">Item 1</div><div style="padding:5px;">Item 2</div><div style="padding:5px;">Item 3</div>'}
+                    </div>`;
+                    break;
+                case 'scrollingframe':
+                    content += `<div style="height:100%; overflow-y:auto; background:#1a1a2e; border:1px solid #4facfe; border-radius:3px; padding:5px;">
+                        ${data.items ? data.items.map(item => `<div style="padding:5px;">${item}</div>`).join('') : '<div style="padding:5px;">Item 1</div><div style="padding:5px;">Item 2</div><div style="padding:5px;">Item 3</div>'}
+                    </div>`;
+                    break;
+            }
+            
+            if (data.labels) {
+                data.labels.forEach(label => {
+                    content += `<div class="movable-label" id="${label.id}" style="left:${label.left}px; top:${label.top}px; position:absolute; cursor:move; background:rgba(255,255,255,0.2); padding:2px 5px; border-radius:3px; font-size:${label.fontSize || 11}px; border:1px dashed #aaa; color:${label.color || '#ffffff'};">${label.text}</div>`;
+                });
+            }
+            
+            content += '</div>';
+            el.innerHTML = header + content;
+            
+            if (data.labels) {
+                data.labels.forEach(label => {
+                    const labelEl = el.querySelector(`#${label.id}`);
+                    if (labelEl) makeLabelDraggable(labelEl, data.id);
+                });
+            }
+            
+            return el;
+        }
+
+        function makeLabelDraggable(labelEl, elementId) {
+            let isDragging = false;
+            let offsetX, offsetY;
+
+            labelEl.addEventListener('mousedown', (e) => {
+                if (e.button !== 0) return;
+                isDragging = true;
+                const rect = labelEl.getBoundingClientRect();
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+                labelEl.style.cursor = 'grabbing';
+                e.stopPropagation();
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const element = document.getElementById(elementId);
+                const elementRect = element.getBoundingClientRect();
+                
+                let newLeft = e.clientX - elementRect.left - offsetX;
+                let newTop = e.clientY - elementRect.top - offsetY;
+                
+                newLeft = Math.max(0, Math.min(newLeft, elementRect.width - labelEl.offsetWidth));
+                newTop = Math.max(0, Math.min(newTop, elementRect.height - labelEl.offsetHeight));
+                
+                labelEl.style.left = newLeft + 'px';
+                labelEl.style.top = newTop + 'px';
+                
+                const elData = guis[currentGUI].elements.find(e => e.id === elementId);
+                if (elData && elData.labels) {
+                    const labelData = elData.labels.find(l => l.id === labelEl.id);
+                    if (labelData) {
+                        labelData.left = newLeft;
+                        labelData.top = newTop;
+                    }
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    addToHistory();
+                }
+                isDragging = false;
+                labelEl.style.cursor = 'move';
+            });
+
+            labelEl.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (selectedMovableLabel) {
+                    const old = document.getElementById(selectedMovableLabel);
+                    if (old) old.classList.remove('selected');
+                }
+                labelEl.classList.add('selected');
+                selectedMovableLabel = labelEl.id;
+                updateMovableLabelProperties(elementId, labelEl.id);
+            });
+
+            labelEl.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                showLabelContextMenu(e, elementId, labelEl.id);
+            });
+        }
+
+        function addMovableLabel(elementId) {
+            const el = guis[currentGUI].elements.find(e => e.id === elementId);
+            if (!el) return;
+            
+            const text = prompt('Label text:', 'New Label');
+            if (!text) return;
+            
+            if (!el.labels) el.labels = [];
+            
+            const newLabel = {
+                id: 'label_' + labelId++,
+                text: text,
+                left: 10,
+                top: 10,
+                fontSize: 11,
+                color: '#ffffff'
+            };
+            
+            el.labels.push(newLabel);
+            renderCanvas();
+            addToHistory();
+            showNotification('Label added', 'success');
+        }
+
+        function deleteMovableLabel(elementId, labelId) {
+            const el = guis[currentGUI].elements.find(e => e.id === elementId);
+            if (!el || !el.labels) return;
+            
+            el.labels = el.labels.filter(l => l.id !== labelId);
+            if (selectedMovableLabel === labelId) {
+                selectedMovableLabel = null;
+                document.getElementById('property-editor').innerHTML = '<p style="color:#aaa; text-align:center;">Select an element</p>';
+            }
+            renderCanvas();
+            addToHistory();
+            showNotification('Label deleted', 'success');
+        }
+
+        function updateMovableLabelProperties(elementId, labelId) {
+            const el = guis[currentGUI].elements.find(e => e.id === elementId);
+            if (!el || !el.labels) return;
+            
+            const label = el.labels.find(l => l.id === labelId);
+            if (!label) return;
+
+            const editor = document.getElementById('property-editor');
+            editor.innerHTML = `
+                <div class="property-group">
+                    <h4>Movable Label</h4>
+                    <label>Text</label>
+                    <input type="text" id="label-text" value="${label.text || ''}">
+                    
+                    <label>Font Size</label>
+                    <input type="range" id="label-fontsize" min="8" max="24" value="${label.fontSize || 11}">
+                    
+                    <label>Color</label>
+                    <input type="color" id="label-color" value="${label.color || '#ffffff'}">
+                    
+                    <label>Position X</label>
+                    <input type="number" id="label-x" value="${label.left || 10}">
+                    
+                    <label>Position Y</label>
+                    <input type="number" id="label-y" value="${label.top || 10}">
+                    
+                    <div class="button-group">
+                        <button onclick="deleteMovableLabel('${elementId}', '${labelId}')" class="delete">Delete</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('label-text')?.addEventListener('input', (e) => {
+                label.text = e.target.value;
+                renderCanvas();
+            });
+
+            document.getElementById('label-fontsize')?.addEventListener('input', (e) => {
+                label.fontSize = parseInt(e.target.value);
+                const labelEl = document.getElementById(labelId);
+                if (labelEl) labelEl.style.fontSize = label.fontSize + 'px';
+            });
+
+            document.getElementById('label-color')?.addEventListener('input', (e) => {
+                label.color = e.target.value;
+                const labelEl = document.getElementById(labelId);
+                if (labelEl) labelEl.style.color = label.color;
+            });
+
+            document.getElementById('label-x')?.addEventListener('input', (e) => {
+                label.left = parseInt(e.target.value);
+                const labelEl = document.getElementById(labelId);
+                if (labelEl) labelEl.style.left = label.left + 'px';
+            });
+
+            document.getElementById('label-y')?.addEventListener('input', (e) => {
+                label.top = parseInt(e.target.value);
+                const labelEl = document.getElementById(labelId);
+                if (labelEl) labelEl.style.top = label.top + 'px';
+            });
+        }
+
+        function showLabelContextMenu(e, elementId, labelId) {
+            if (contextMenu) contextMenu.remove();
+
+            contextMenu = document.createElement('div');
+            contextMenu.className = 'context-menu';
+            contextMenu.style.left = e.pageX + 'px';
+            contextMenu.style.top = e.pageY + 'px';
+
+            const items = [
+                { label: 'Edit Text', action: () => editLabelText(elementId, labelId) },
+                { label: 'Change Color', action: () => changeLabelColor(elementId, labelId) },
+                { label: 'Duplicate', action: () => duplicateLabel(elementId, labelId) },
+                { label: 'Delete', action: () => deleteMovableLabel(elementId, labelId), className: 'delete' }
+            ];
+
+            items.forEach(item => {
+                const mi = document.createElement('div');
+                mi.className = `context-menu-item ${item.className || ''}`;
+                mi.textContent = item.label;
+                mi.onclick = () => { item.action(); contextMenu.remove(); };
+                contextMenu.appendChild(mi);
+            });
+
+            document.body.appendChild(contextMenu);
+            setTimeout(() => {
+                document.addEventListener('click', function close() {
+                    if (contextMenu) contextMenu.remove();
+                    document.removeEventListener('click', close);
+                }, { once: true });
+            }, 0);
+        }
+
+        function duplicateLabel(elementId, labelId) {
+            const el = guis[currentGUI].elements.find(e => e.id === elementId);
+            if (!el || !el.labels) return;
+            
+            const label = el.labels.find(l => l.id === labelId);
+            if (!label) return;
+            
+            const newLabel = {
+                ...JSON.parse(JSON.stringify(label)),
+                id: 'label_' + labelId++,
+                left: label.left + 10,
+                top: label.top + 10
+            };
+            
+            el.labels.push(newLabel);
+            renderCanvas();
+            addToHistory();
+            showNotification('Label duplicated', 'success');
+        }
+
+        function editLabelText(elementId, labelId) {
+            const el = guis[currentGUI].elements.find(e => e.id === elementId);
+            if (!el || !el.labels) return;
+            const label = el.labels.find(l => l.id === labelId);
+            if (!label) return;
+            
+            const newText = prompt('Enter label text:', label.text);
+            if (newText !== null) {
+                label.text = newText;
+                renderCanvas();
+                showNotification('Label updated', 'success');
+            }
+        }
+
+        function changeLabelColor(elementId, labelId) {
+            const el = guis[currentGUI].elements.find(e => e.id === elementId);
+            if (!el || !el.labels) return;
+            const label = el.labels.find(l => l.id === labelId);
+            if (!label) return;
+            
+            const color = prompt('Enter color (hex):', label.color || '#ffffff');
+            if (color) {
+                label.color = color;
+                renderCanvas();
+                showNotification('Color updated', 'success');
+            }
+        }
+
+        function createElement(type, text, x, y) {
+            const id = 'element_' + elementId++;
+            const newEl = {
+                id: id,
+                type: type,
+                name: type + '_' + elementId,
+                left: x,
+                top: y,
+                width: type === 'frame' || type === 'scrollingframe' ? 200 : 150,
+                height: type === 'frame' || type === 'scrollingframe' ? 150 : 80,
+                color: type === 'frame' || type === 'scrollingframe' ? 'rgba(79,172,254,0.3)' : 'rgba(79,172,254,0.2)',
+                visible: true,
+                text: text,
+                labels: [],
+                functions: {}
+            };
+            
+            if (type === 'button') newEl.onClick = '';
+            if (type === 'slider') {
+                newEl.min = 0;
+                newEl.max = 100;
+                newEl.value = 50;
+                newEl.onChanged = '';
+            }
+            if (type === 'toggle') {
+                newEl.active = false;
+                newEl.onToggled = '';
+            }
+            if (type === 'textbox') {
+                newEl.placeholder = 'Enter text...';
+                newEl.onChanged = '';
+            }
+            if (type === 'list' || type === 'scrollingframe') {
+                newEl.items = ['Item 1', 'Item 2', 'Item 3'];
+            }
+            
+            if (!guis[currentGUI].elements) guis[currentGUI].elements = [];
+            guis[currentGUI].elements.push(newEl);
+            
+            renderCanvas();
+            addToHistory();
+            return id;
+        }
+
+        function selectElement(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                if (selectedElement) selectedElement.classList.remove('selected');
+                selectedElement = element;
+                element.classList.add('selected');
+                selectedMovableLabel = null;
+                updateProperties(id);
+            }
+        }
+
+        function toggleElementVisibility(id) {
+            const el = guis[currentGUI].elements.find(e => e.id === id);
+            if (el) {
+                el.visible = !el.visible;
+                renderCanvas();
+                addToHistory();
+                showNotification(`Element ${el.visible ? 'shown' : 'hidden'}`, 'success');
+            }
+        }
+
+        document.querySelectorAll('.element-btn').forEach(btn => {
+            btn.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', JSON.stringify({
+                    type: btn.dataset.type,
+                    text: btn.dataset.text
+                }));
+            });
+        });
+
+        document.getElementById('canvas').addEventListener('dragover', (e) => e.preventDefault());
+
+        document.getElementById('canvas').addEventListener('drop', (e) => {
+            e.preventDefault();
+            const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+            const rect = e.target.closest('.canvas').getBoundingClientRect();
+            const x = e.clientX - rect.left - 75;
+            const y = e.clientY - rect.top - 40;
+            createElement(data.type, data.text, x, y);
+            showNotification('Element added', 'success');
+        });
+
+        function makeElementDraggable(element) {
+            let isDragging = false;
+            let offsetX, offsetY;
+
+            element.addEventListener('mousedown', (e) => {
+                if (e.button !== 0 || e.target.classList.contains('visibility-indicator') || e.target.classList.contains('movable-label') || e.target.classList.contains('element-name')) return;
+                isDragging = true;
+                const rect = element.getBoundingClientRect();
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+                element.style.cursor = 'grabbing';
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const canvasRect = document.getElementById('canvas').getBoundingClientRect();
+                let newLeft = e.clientX - canvasRect.left - offsetX;
+                let newTop = e.clientY - canvasRect.top - offsetY;
+                
+                newLeft = Math.max(0, Math.min(newLeft, canvasRect.width - element.offsetWidth));
+                newTop = Math.max(0, Math.min(newTop, canvasRect.height - element.offsetHeight));
+                
+                element.style.left = newLeft + 'px';
+                element.style.top = newTop + 'px';
+                
+                const elData = guis[currentGUI].elements.find(e => e.id === element.id);
+                if (elData) {
+                    elData.left = newLeft;
+                    elData.top = newTop;
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    addToHistory();
+                }
+                isDragging = false;
+                element.style.cursor = 'move';
+            });
+        }
+
+        function makeElementSelectable(element) {
+            element.addEventListener('click', (e) => {
+                if (e.target.classList.contains('movable-label') || e.target.classList.contains('visibility-indicator')) return;
+                selectElement(element.id);
+            });
+
+            element.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                if (e.target.classList.contains('movable-label')) return;
+                showElementContextMenu(e, element.id);
+            });
+        }
+
+        function showElementContextMenu(e, elementId) {
+            if (contextMenu) contextMenu.remove();
+
+            contextMenu = document.createElement('div');
+            contextMenu.className = 'context-menu';
+            contextMenu.style.left = e.pageX + 'px';
+            contextMenu.style.top = e.pageY + 'px';
+
+            const items = [
+                { label: 'Add Function', action: () => openFunctionEditor(elementId) },
+                { label: 'Add Movable Label', action: () => addMovableLabel(elementId) },
+                { label: 'Toggle Visibility', action: () => toggleElementVisibility(elementId) },
+                { label: 'Change Color', action: () => changeElementColor(elementId) },
+                { label: 'Resize', action: () => resizeElement(elementId) },
+                { label: 'Rename', action: () => renameElement(elementId) },
+                { label: 'Copy', action: () => copyElement(elementId) },
+                { label: 'Paste', action: () => pasteElement(elementId), disabled: !clipboard },
+                { label: 'Duplicate', action: () => duplicateElement(elementId) },
+                { label: 'Delete', action: () => deleteElement(elementId), className: 'delete' }
+            ];
+
+            items.forEach(item => {
+                if (item.disabled) return;
+                const mi = document.createElement('div');
+                mi.className = `context-menu-item ${item.className || ''}`;
+                mi.textContent = item.label;
+                mi.onclick = () => { item.action(); contextMenu.remove(); };
+                contextMenu.appendChild(mi);
+            });
+
+            document.body.appendChild(contextMenu);
+            setTimeout(() => {
+                document.addEventListener('click', function close() {
+                    if (contextMenu) contextMenu.remove();
+                    document.removeEventListener('click', close);
+                }, { once: true });
+            }, 0);
+        }
+
+        function openFunctionEditor(elementId) {
+            const el = guis[currentGUI].elements.find(e => e.id === elementId);
+            if (!el) return;
+
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h3>Function Editor - ${el.name || el.type}</h3>
+                    
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        ${Object.entries(el.functions || {}).map(([name, code]) => `
+                            <div class="function-item">
+                                <div class="function-header">
+                                    <span class="function-name">${name}</span>
+                                    <div class="function-actions">
+                                        <button onclick="editFunction('${elementId}', '${name}')">✏️</button>
+                                        <button onclick="deleteFunction('${elementId}', '${name}')">🗑️</button>
+                                    </div>
+                                </div>
+                                <pre>${code || ''}</pre>
+                            </div>
+                        `).join('')}
+                        
+                        <div class="function-item">
+                            <div class="function-header">
+                                <span class="function-name">New Function</span>
+                            </div>
+                            <select id="new-function-type">
+                                <option value="onClick">onClick (Button)</option>
+                                <option value="onChanged">onChanged (Slider/Text)</option>
+                                <option value="onToggled">onToggled (Toggle)</option>
+                                <option value="onMouseEnter">onMouseEnter</option>
+                                <option value="onMouseLeave">onMouseLeave</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                            <input type="text" id="new-function-name" placeholder="Function name (if custom)" style="display:none;">
+                            <textarea id="new-function-code" placeholder="Lua code..." rows="5">print("function called")</textarea>
+                            <div class="button-group">
+                                <button onclick="addFunction('${elementId}')" class="success">Add Function</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-buttons">
+                        <button onclick="this.closest('.modal').remove()" class="cancel">Close</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            document.getElementById('new-function-type').addEventListener('change', (e) => {
+                const customInput = document.getElementById('new-function-name');
+                if (e.target.value === 'custom') {
+                    customInput.style.display = 'block';
+                } else {
+                    customInput.style.display = 'none';
+                }
+            });
+        }
+
+        function addFunction(elementId) {
+            const el = guis[currentGUI].elements.find(e => e.id === elementId);
+            if (!el) return;
+
+            const type = document.getElementById('new-function-type').value;
+            let name = type;
+            if (type === 'custom') {
+                name = document.getElementById('new-function-name').value;
+                if (!name) {
+                    showNotification('Enter function name', 'error');
+                    return;
+                }
+            }
+
+            const code = document.getElementById('new-function-code').value;
+            if (!code) {
+                showNotification('Enter function code', 'error');
+                return;
+            }
+
+            if (!el.functions) el.functions = {};
+            el.functions[name] = code;
+
+            document.querySelector('.modal').remove();
+            renderCanvas();
+            addToHistory();
+            showNotification(`Function ${name} added`, 'success');
+        }
+
+        function editFunction(elementId, functionName) {
+            const el = guis[currentGUI].elements.find(e => e.id === elementId);
+            if (!el || !el.functions) return;
+
+            const newCode = prompt('Edit function code:', el.functions[functionName]);
+            if (newCode !== null) {
+                el.functions[functionName] = newCode;
+                renderCanvas();
+                addToHistory();
+                showNotification('Function updated', 'success');
+            }
+        }
+
+        function deleteFunction(elementId, functionName) {
+            const el = guis[currentGUI].elements.find(e => e.id === elementId);
+            if (!el || !el.functions) return;
+
+            if (confirm(`Delete function ${functionName}?`)) {
+                delete el.functions[functionName];
+                renderCanvas();
+                addToHistory();
+                showNotification('Function deleted', 'success');
+            }
+        }
+
+        function copyElement(id) {
+            const el = guis[currentGUI].elements.find(e => e.id === id);
+            if (el) {
+                clipboard = JSON.parse(JSON.stringify(el));
+                showNotification('Element copied', 'success');
+            }
+        }
+
+        function pasteElement(targetId) {
+            if (!clipboard) return;
+
+            const newEl = JSON.parse(JSON.stringify(clipboard));
+            newEl.id = 'element_' + elementId++;
+            newEl.left += 20;
+            newEl.top += 20;
+            newEl.name = clipboard.name + '_Copy';
+            
+            if (newEl.labels) {
+                newEl.labels = newEl.labels.map(l => ({...l, id: 'label_' + labelId++}));
+            }
+
+            guis[currentGUI].elements.push(newEl);
+            renderCanvas();
+            addToHistory();
+            showNotification('Element pasted', 'success');
+        }
+
+        function changeElementColor(id) {
+            const el = guis[currentGUI].elements.find(e => e.id === id);
+            if (!el) return;
+            const color = prompt('Color (hex or rgba):', el.color || 'rgba(79,172,254,0.2)');
+            if (color) {
+                el.color = color;
+                renderCanvas();
+                addToHistory();
+                showNotification('Color updated', 'success');
+            }
+        }
+
+        function resizeElement(id) {
+            const el = guis[currentGUI].elements.find(e => e.id === id);
+            if (!el) return;
+            const w = prompt('Width (px):', el.width);
+            const h = prompt('Height (px):', el.height);
+            if (w) el.width = parseInt(w);
+            if (h) el.height = parseInt(h);
+            renderCanvas();
+            addToHistory();
+            showNotification('Size updated', 'success');
+        }
+
+        function renameElement(id) {
+            const el = guis[currentGUI].elements.find(e => e.id === id);
+            if (!el) return;
+            const name = prompt('Element name:', el.name || el.type);
+            if (name) {
+                el.name = name;
+                renderCanvas();
+                addToHistory();
+                showNotification('Renamed', 'success');
+            }
+        }
+
+        function duplicateElement(id) {
+            const el = guis[currentGUI].elements.find(e => e.id === id);
+            if (!el) return;
+            const newEl = JSON.parse(JSON.stringify(el));
+            newEl.id = 'element_' + elementId++;
+            newEl.left += 20;
+            newEl.top += 20;
+            newEl.name = el.name + '_Copy';
+            if (newEl.labels) {
+                newEl.labels = newEl.labels.map(l => ({...l, id: 'label_' + labelId++}));
+            }
+            guis[currentGUI].elements.push(newEl);
+            renderCanvas();
+            addToHistory();
+            showNotification('Element duplicated', 'success');
+        }
+
+        function deleteElement(id) {
+            if (!confirm('Delete this element?')) return;
+            guis[currentGUI].elements = guis[currentGUI].elements.filter(e => e.id !== id);
+            if (selectedElement && selectedElement.id === id) {
+                selectedElement = null;
+                document.getElementById('property-editor').innerHTML = '<p style="color:#aaa; text-align:center;">Select an element</p>';
+            }
+            renderCanvas();
+            addToHistory();
+            showNotification('Element deleted', 'success');
+        }
+
+        function updateProperties(id) {
+            const el = guis[currentGUI].elements.find(e => e.id === id);
+            if (!el) return;
+
+            const editor = document.getElementById('property-editor');
+            editor.innerHTML = `
+                <div class="property-group">
+                    <h4>Basic</h4>
+                    <label>Name</label>
+                    <input type="text" id="prop-name" value="${el.name || ''}">
+                    
+                    <label>Type</label>
+                    <input type="text" value="${el.type}" disabled>
+                    
+                    <label>Visible</label>
+                    <select id="prop-visible">
+                        <option value="true" ${el.visible ? 'selected' : ''}>Yes</option>
+                        <option value="false" ${!el.visible ? 'selected' : ''}>No</option>
+                    </select>
+                </div>
+
+                <div class="property-group">
+                    <h4>Position & Size</h4>
+                    <label>X</label>
+                    <input type="number" id="prop-x" value="${el.left}">
+                    <label>Y</label>
+                    <input type="number" id="prop-y" value="${el.top}">
+                    <label>Width</label>
+                    <input type="range" id="prop-width" min="50" max="500" value="${el.width}">
+                    <input type="number" id="prop-width-num" value="${el.width}" min="50" max="500">
+                    <label>Height</label>
+                    <input type="range" id="prop-height" min="30" max="500" value="${el.height}">
+                    <input type="number" id="prop-height-num" value="${el.height}" min="30" max="500">
+                </div>
+
+                <div class="property-group">
+                    <h4>Appearance</h4>
+                    <label>Color</label>
+                    <input type="color" id="prop-color" value="${el.color && el.color.includes('#') ? el.color : '#4facfe'}">
+                    <input type="text" id="prop-color-text" value="${el.color || 'rgba(79,172,254,0.2)'}">
+                </div>
+
+                ${el.type === 'button' || el.type === 'label' || el.type === 'frame' ? `
+                <div class="property-group">
+                    <h4>Text</h4>
+                    <input type="text" id="prop-text" value="${el.text || ''}">
+                </div>
+                ` : ''}
+
+                ${el.type === 'slider' ? `
+                <div class="property-group">
+                    <h4>Slider</h4>
+                    <label>Min</label>
+                    <input type="number" id="prop-min" value="${el.min || 0}">
+                    <label>Max</label>
+                    <input type="number" id="prop-max" value="${el.max || 100}">
+                    <label>Value</label>
+                    <input type="number" id="prop-value" value="${el.value || 50}">
+                </div>
+                ` : ''}
+
+                ${el.type === 'toggle' ? `
+                <div class="property-group">
+                    <h4>Toggle</h4>
+                    <label>Active</label>
+                    <select id="prop-active">
+                        <option value="true" ${el.active ? 'selected' : ''}>Yes</option>
+                        <option value="false" ${!el.active ? 'selected' : ''}>No</option>
+                    </select>
+                </div>
+                ` : ''}
+
+                ${el.type === 'textbox' ? `
+                <div class="property-group">
+                    <h4>Text Input</h4>
+                    <label>Placeholder</label>
+                    <input type="text" id="prop-placeholder" value="${el.placeholder || ''}">
+                </div>
+                ` : ''}
+
+                ${el.type === 'image' ? `
+                <div class="property-group">
+                    <h4>Image</h4>
+                    <label>Image ID</label>
+                    <input type="text" id="prop-imageid" value="${el.imageId || ''}">
+                </div>
+                ` : ''}
+
+                ${el.type === 'list' || el.type === 'scrollingframe' ? `
+                <div class="property-group">
+                    <h4>Items</h4>
+                    <textarea id="prop-items" rows="5">${(el.items || []).join('\n')}</textarea>
+                </div>
+                ` : ''}
+
+                <div class="property-group">
+                    <h4>
+                        Functions (${Object.keys(el.functions || {}).length})
+                        <button onclick="openFunctionEditor('${el.id}')" style="background:#4facfe; border:none; color:white; padding:2px 8px; border-radius:3px; cursor:pointer;">+</button>
+                    </h4>
+                    ${Object.entries(el.functions || {}).map(([name, code]) => `
+                        <div class="function-item">
+                            <div class="function-header">
+                                <span class="function-name">${name}</span>
+                                <div class="function-actions">
+                                    <button onclick="editFunction('${el.id}', '${name}')">✏️</button>
+                                    <button onclick="deleteFunction('${el.id}', '${name}')">🗑️</button>
+                                </div>
+                            </div>
+                            <pre>${code.substring(0, 50)}${code.length > 50 ? '...' : ''}</pre>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="property-group">
+                    <h4>Labels (${el.labels ? el.labels.length : 0})</h4>
+                    <button onclick="addMovableLabel('${el.id}')" style="background:#4facfe; width:100%; padding:8px; border:none; color:white; border-radius:3px; cursor:pointer;">+ Add Label</button>
+                </div>
+            `;
+
+            document.getElementById('prop-name')?.addEventListener('input', (e) => { el.name = e.target.value; renderCanvas(); });
+            document.getElementById('prop-visible')?.addEventListener('change', (e) => { el.visible = e.target.value === 'true'; renderCanvas(); });
+            document.getElementById('prop-x')?.addEventListener('input', (e) => { el.left = parseInt(e.target.value); renderCanvas(); });
+            document.getElementById('prop-y')?.addEventListener('input', (e) => { el.top = parseInt(e.target.value); renderCanvas(); });
+            
+            document.getElementById('prop-width')?.addEventListener('input', (e) => { 
+                el.width = parseInt(e.target.value); 
+                document.getElementById('prop-width-num').value = e.target.value;
+                renderCanvas(); 
+            });
+            document.getElementById('prop-width-num')?.addEventListener('input', (e) => { 
+                el.width = parseInt(e.target.value); 
+                document.getElementById('prop-width').value = e.target.value;
+                renderCanvas(); 
+            });
+            
+            document.getElementById('prop-height')?.addEventListener('input', (e) => { 
+                el.height = parseInt(e.target.value); 
+                document.getElementById('prop-height-num').value = e.target.value;
+                renderCanvas(); 
+            });
+            document.getElementById('prop-height-num')?.addEventListener('input', (e) => { 
+                el.height = parseInt(e.target.value); 
+                document.getElementById('prop-height').value = e.target.value;
+                renderCanvas(); 
+            });
+
+            document.getElementById('prop-color')?.addEventListener('input', (e) => { 
+                el.color = e.target.value; 
+                document.getElementById('prop-color-text').value = e.target.value;
+                renderCanvas(); 
+            });
+            document.getElementById('prop-color-text')?.addEventListener('input', (e) => { 
+                el.color = e.target.value; 
+                document.getElementById('prop-color').value = e.target.value;
+                renderCanvas(); 
+            });
+
+            document.getElementById('prop-text')?.addEventListener('input', (e) => { el.text = e.target.value; renderCanvas(); });
+            document.getElementById('prop-min')?.addEventListener('input', (e) => { el.min = parseInt(e.target.value); renderCanvas(); });
+            document.getElementById('prop-max')?.addEventListener('input', (e) => { el.max = parseInt(e.target.value); renderCanvas(); });
+            document.getElementById('prop-value')?.addEventListener('input', (e) => { el.value = parseInt(e.target.value); renderCanvas(); });
+            document.getElementById('prop-active')?.addEventListener('change', (e) => { el.active = e.target.value === 'true'; renderCanvas(); });
+            document.getElementById('prop-placeholder')?.addEventListener('input', (e) => { el.placeholder = e.target.value; renderCanvas(); });
+            document.getElementById('prop-imageid')?.addEventListener('input', (e) => { el.imageId = e.target.value; renderCanvas(); });
+            
+            document.getElementById('prop-items')?.addEventListener('input', (e) => { 
+                el.items = e.target.value.split('\n').filter(i => i.trim());
+                renderCanvas(); 
+            });
+        }
+
+        function generateLuaCode() {
+            let code = 'local ScreenGui = Instance.new("ScreenGui")\n';
+            code += `ScreenGui.Name = "${guis[currentGUI].name}"\n`;
+            code += 'ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")\n\n';
+
+            guis[currentGUI].elements.forEach(el => {
+                if (el.visible === false) return;
+                
+                let type = 'Frame';
+                if (el.type === 'button') type = 'TextButton';
+                else if (el.type === 'label') type = 'TextLabel';
+                else if (el.type === 'textbox') type = 'TextBox';
+                else if (el.type === 'image') type = 'ImageLabel';
+                else if (el.type === 'list') type = 'Frame';
+                else if (el.type === 'scrollingframe') type = 'ScrollingFrame';
+                
+                let varName = (el.name || 'element').replace(/-/g, '_');
+                
+                code += `\nlocal ${varName} = Instance.new("${type}")\n`;
+                code += `${varName}.Name = "${el.name || el.type}"\n`;
+                code += `${varName}.Parent = ScreenGui\n`;
+                code += `${varName}.Position = UDim2.new(0, ${el.left}, 0, ${el.top})\n`;
+                code += `${varName}.Size = UDim2.new(0, ${el.width}, 0, ${el.height})\n`;
+                
+                if (el.color) {
+                    if (el.color.includes('rgba')) {
+                        const match = el.color.match(/[\d.]+/g);
+                        if (match && match.length >= 3) {
+                            code += `${varName}.BackgroundColor3 = Color3.new(${match[0]/255}, ${match[1]/255}, ${match[2]/255})\n`;
+                            if (match[3]) code += `${varName}.BackgroundTransparency = ${1 - parseFloat(match[3])}\n`;
+                        }
+                    } else {
+                        const rgb = hexToRgb(el.color);
+                        code += `${varName}.BackgroundColor3 = Color3.new(${rgb.r/255}, ${rgb.g/255}, ${rgb.b/255})\n`;
+                    }
+                }
+                
+                if (el.type === 'button' || el.type === 'label') {
+                    code += `${varName}.Text = "${el.text || ''}"\n`;
+                    code += `${varName}.TextColor3 = Color3.new(1, 1, 1)\n`;
+                    code += `${varName}.TextScaled = true\n`;
+                } else if (el.type === 'textbox') {
+                    code += `${varName}.PlaceholderText = "${el.placeholder || ''}"\n`;
+                    code += `${varName}.Text = ""\n`;
+                } else if (el.type === 'image') {
+                    code += `${varName}.Image = "rbxassetid://${el.imageId || ''}"\n`;
+                } else if (el.type === 'scrollingframe') {
+                    code += `${varName}.CanvasSize = UDim2.new(0, 0, 0, ${(el.items || []).length * 30})\n`;
+                    code += `${varName}.ScrollBarThickness = 10\n`;
+                }
+                
+                if (el.functions) {
+                    Object.entries(el.functions).forEach(([name, funcCode]) => {
+                        let eventName = name;
+                        if (name === 'onClick') eventName = 'MouseButton1Click';
+                        else if (name === 'onChanged') eventName = 'Changed';
+                        else if (name === 'onToggled') eventName = 'Toggled';
+                        else if (name === 'onMouseEnter') eventName = 'MouseEnter';
+                        else if (name === 'onMouseLeave') eventName = 'MouseLeave';
+                        
+                        code += `${varName}.${eventName}:Connect(function()\n`;
+                        code += `    ${funcCode}\n`;
+                        code += `end)\n`;
+                    });
+                }
+                
+                if (el.type === 'list' && el.items) {
+                    el.items.forEach((item, index) => {
+                        code += `\nlocal item_${index} = Instance.new("TextLabel")\n`;
+                        code += `item_${index}.Parent = ${varName}\n`;
+                        code += `item_${index}.Size = UDim2.new(1, 0, 0, 30)\n`;
+                        code += `item_${index}.Position = UDim2.new(0, 0, 0, ${index * 30})\n`;
+                        code += `item_${index}.Text = "${item}"\n`;
+                        code += `item_${index}.BackgroundColor3 = Color3.new(0.1, 0.1, 0.2)\n`;
+                        code += `item_${index}.BorderSizePixel = 0\n`;
+                    });
+                }
+                
+                if (el.labels && el.labels.length > 0) {
+                    el.labels.forEach((label, index) => {
+                        code += `\nlocal label_${index} = Instance.new("TextLabel")\n`;
+                        code += `label_${index}.Name = "MovableLabel"\n`;
+                        code += `label_${index}.Parent = ${varName}\n`;
+                        code += `label_${index}.Text = "${label.text}"\n`;
+                        code += `label_${index}.Position = UDim2.new(0, ${label.left}, 0, ${label.top})\n`;
+                        code += `label_${index}.Size = UDim2.new(0, ${label.text.length * 8}, 0, 20)\n`;
+                        code += `label_${index}.BackgroundColor3 = Color3.new(0, 0, 0)\n`;
+                        code += `label_${index}.BackgroundTransparency = 0.5\n`;
+                        code += `label_${index}.TextColor3 = Color3.fromHex("${(label.color || '#ffffff').replace('#', '')}")\n`;
+                        code += `label_${index}.TextSize = ${label.fontSize || 11}\n`;
+                    });
+                }
+            });
+
+            document.getElementById('lua-code').textContent = code;
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : { r: 79, g: 172, b: 254 };
+        }
+
+        function copyLuaCode() {
+            navigator.clipboard.writeText(document.getElementById('lua-code').textContent);
+            showNotification('Code copied!', 'success');
+        }
+
+        setInterval(generateLuaCode, 1000);
+
+        updateGUISelector();
+        renderCanvas();
+        addToHistory();
+    </script>
+</body>
+</html>
