@@ -9,6 +9,21 @@ local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "LikegenmLoader"
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
+local function playNotificationSound(isSuccess)
+    local sound = Instance.new("Sound")
+    sound.Parent = screenGui
+    sound.Volume = 1.0
+    if isSuccess then
+        sound.SoundId = "rbxassetid://9120388700"
+    else
+        sound.SoundId = "rbxassetid://2760979672"
+    end
+    sound:Play()
+    sound.Ended:Connect(function()
+        sound:Destroy()
+    end)
+end
+
 local blackScreen = Instance.new("Frame")
 blackScreen.Size = UDim2.new(1, 0, 1, 0)
 blackScreen.Position = UDim2.new(0, 0, 0, 0)
@@ -117,7 +132,8 @@ local function checkGame()
         [4777817887] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/BladeBall.lua", "Blade Ball"},
         [1934496708] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/ScpProject.lua", "SCP Project"},
         [1116949753] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/Isle.lua", "The Isle"},
-        [7633926880] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/BloxStrike.lua", "BloxStrike"}
+        [7633926880] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/BloxStrike.lua", "BloxStrike"},
+        [9363735110] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/ETFB.lua", "Escape Tsunami for Brainrots"}
     }
     
     statusLabel.Text = "Game ID: " .. tostring(currentGameId)
@@ -140,7 +156,7 @@ local function checkGame()
         if success then
             statusLabel.Text = "Script loaded successfully!"
             updateSlider(1, Color3.fromRGB(0, 255, 0))
-            
+            playNotificationSound(true)
             StarterGui:SetCore("SendNotification", {
                 Title = "Likegenm Scripts",
                 Text = "Loaded: " .. gameScripts[currentGameId][2],
@@ -150,10 +166,10 @@ local function checkGame()
         else
             statusLabel.Text = "Error loading script!"
             updateSlider(1, Color3.fromRGB(255, 0, 0))
-            
+            playNotificationSound(false)
             StarterGui:SetCore("SendNotification", {
                 Title = "Error",
-                Text = "Failed to load script",
+                Text = "Failed to load script: " .. tostring(errorMsg),
                 Duration = 5,
                 Icon = "rbxassetid://4483345998"
             })
@@ -161,7 +177,7 @@ local function checkGame()
     else
         statusLabel.Text = "Game not supported"
         updateSlider(1, Color3.fromRGB(255, 0, 0))
-        
+        playNotificationSound(false)
         StarterGui:SetCore("SendNotification", {
             Title = "Likegenm Scripts",
             Text = "This game is not supported",
