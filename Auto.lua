@@ -134,7 +134,7 @@ local function checkGame()
         [1116949753] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/Isle.lua", "The Isle"},
         [7633926880] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/BloxStrike.lua", "BloxStrike"},
         [9363735110] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/ETFB.lua", "Escape Tsunami for Brainrots"},
-        [8581084604] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/Murino.lua", "Murino"}
+        [8581084604] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/MurinoHorror.lua", "Murino"}
     }
     
     statusLabel.Text = "Game ID: " .. tostring(currentGameId)
