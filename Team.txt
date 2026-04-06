@@ -1,5 +1,5 @@
 Main:Likegenm
-Second scripter:nil
+Second scripter: Vicinly
 Sounds:Wneowillary
 Animastions: Pepelo4ek
 Third scripter:nil
