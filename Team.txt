@@ -1,9 +1,0 @@
-Main:Likegenm
-Second scripter: Vicinly
-Sounds:Wneowillary
-Animastions: Pepelo4ek
-Third scripter:nil
-Tester:Likegenm
-Libs:WindUI,RayField,Obsidian,Lin
-GUI helper:nil
-Cipher Creator: Likegenm
