@@ -114,9 +114,67 @@ local function showAnimation()
     end
 end
 
+local function checkUNC()
+    local uncPercent = 0
+    
+    if UNC and type(UNC) == "table" then
+        if UNC.percent then
+            uncPercent = UNC.percent
+        elseif UNC.get_unc_percent then
+            uncPercent = UNC.get_unc_percent()
+        end
+    elseif sUNC and type(sUNC) == "table" then
+        if sUNC.percent then
+            uncPercent = sUNC.percent
+        elseif sUNC.get_unc_percent then
+            uncPercent = sUNC.get_unc_percent()
+        end
+    else
+        local uncFunctions = {"getgc", "getgenv", "getrenv", "hookfunction", "hookmetamethod", "newcclosure"}
+        local found = 0
+        for _, func in ipairs(uncFunctions) do
+            if _G[func] or getfenv()[func] then
+                found = found + 1
+            end
+        end
+        uncPercent = math.floor((found / #uncFunctions) * 100)
+    end
+    
+    return uncPercent
+end
+
 local function checkGame()
+    statusLabel.Text = "Checking UNC/sUNC..."
+    updateSlider(0.05, Color3.fromRGB(255, 0, 0))
+    wait(0.3)
+    
+    local uncPercent = checkUNC()
+    
+    if uncPercent < 75 then
+        StarterGui:SetCore("SendNotification", {
+            Title = "Executor Warning",
+            Text = "Some functions may not work properly",
+            Duration = 8,
+            Icon = "rbxassetid://4483345998"
+        })
+        statusLabel.Text = "UNC: " .. uncPercent .. "% - Limited functionality"
+    elseif uncPercent < 80 then
+        StarterGui:SetCore("SendNotification", {
+            Title = "Security Warning",
+            Text = "High ban risk detected",
+            Duration = 8,
+            Icon = "rbxassetid://4483345998"
+        })
+        statusLabel.Text = "UNC: " .. uncPercent .. "% - Ban risk"
+    else
+        statusLabel.Text = "UNC: " .. uncPercent .. "% - Optimal"
+    end
+    
+    updateSlider(0.1, Color3.fromRGB(255, 100, 0))
+    wait(0.5)
+    
     statusLabel.Text = "Checking Game ID..."
-    updateSlider(0.1, Color3.fromRGB(255, 0, 0))
+    updateSlider(0.2, Color3.fromRGB(255, 150, 0))
     wait(0.5)
     
     local gameScripts = {
@@ -170,7 +228,7 @@ local function checkGame()
             playNotificationSound(false)
             StarterGui:SetCore("SendNotification", {
                 Title = "Error",
-                Text = "Failed to load script: " .. tostring(errorMsg),
+                Text = "Failed to load script",
                 Duration = 5,
                 Icon = "rbxassetid://4483345998"
             })
