@@ -9,6 +9,8 @@ local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "LikegenmLoader"
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
+local isLoaded = false
+
 local function playNotificationSound(isSuccess)
     local sound = Instance.new("Sound")
     sound.Parent = screenGui
@@ -101,17 +103,55 @@ local function showAnimation()
     }
     
     local colorIndex = 1
-    local startTime = tick()
     
-    while tick() - startTime < 2 do
+    while not isLoaded do
         textLabel.TextColor3 = colors[colorIndex]
         colorIndex = colorIndex + 1
         if colorIndex > #colors then colorIndex = 1 end
-        local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Linear)
-        local colorTween = TweenService:Create(textLabel, tweenInfo, {TextColor3 = colors[colorIndex]})
-        colorTween:Play()
         wait(0.5)
+        if isLoaded then break end
     end
+end
+
+local function forceCloseGUI()
+    if not isLoaded then
+        isLoaded = true
+        pcall(function()
+            screenGui:Destroy()
+        end)
+    end
+end
+
+local function fadeOutAndDestroy()
+    isLoaded = true
+    
+    local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local fadeOut = TweenService:Create(blackScreen, tweenInfo, {BackgroundTransparency = 1})
+    local textFade = TweenService:Create(textLabel, tweenInfo, {TextTransparency = 1})
+    local statusFade = TweenService:Create(statusLabel, tweenInfo, {TextTransparency = 1})
+    local sliderFade = TweenService:Create(sliderFrame, tweenInfo, {BackgroundTransparency = 1})
+    local fillFade = TweenService:Create(sliderFill, tweenInfo, {BackgroundTransparency = 1})
+    
+    fadeOut:Play()
+    textFade:Play()
+    statusFade:Play()
+    sliderFade:Play()
+    fillFade:Play()
+    
+    local connection
+    connection = fadeOut.Completed:Connect(function()
+        pcall(function()
+            screenGui:Destroy()
+        end)
+        connection:Disconnect()
+    end)
+    
+    task.wait(2)
+    pcall(function()
+        if screenGui and screenGui.Parent then
+            screenGui:Destroy()
+        end
+    end)
 end
 
 local function checkUNC()
@@ -144,9 +184,11 @@ local function checkUNC()
 end
 
 local function checkGame()
+    task.delay(10, forceCloseGUI)
+    
     statusLabel.Text = "Checking UNC/sUNC..."
     updateSlider(0.05, Color3.fromRGB(255, 0, 0))
-    wait(0.3)
+    task.wait(0.3)
     
     local uncPercent = checkUNC()
     
@@ -171,11 +213,11 @@ local function checkGame()
     end
     
     updateSlider(0.1, Color3.fromRGB(255, 100, 0))
-    wait(0.5)
+    task.wait(0.5)
     
     statusLabel.Text = "Checking Game ID..."
     updateSlider(0.2, Color3.fromRGB(255, 150, 0))
-    wait(0.5)
+    task.wait(0.5)
     
     local gameScripts = {
         [3808081382] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/TSB.lua", "The Strongest Battlegrounds"},
@@ -199,16 +241,16 @@ local function checkGame()
     
     statusLabel.Text = "Game ID: " .. tostring(currentGameId)
     updateSlider(0.3, Color3.fromRGB(255, 100, 0))
-    wait(0.5)
+    task.wait(0.5)
     
     if gameScripts[currentGameId] then
         statusLabel.Text = "Found: " .. gameScripts[currentGameId][2]
         updateSlider(0.5, Color3.fromRGB(255, 255, 0))
-        wait(0.5)
+        task.wait(0.5)
         
         statusLabel.Text = "Loading script..."
         updateSlider(0.7, Color3.fromRGB(100, 255, 0))
-        wait(0.5)
+        task.wait(0.5)
         
         local success, errorMsg = pcall(function()
             loadstring(game:HttpGet(gameScripts[currentGameId][1], true))()
@@ -247,23 +289,7 @@ local function checkGame()
         })
     end
     
-    wait(1)
-    
-    local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    local fadeOut = TweenService:Create(blackScreen, tweenInfo, {BackgroundTransparency = 1})
-    local textFade = TweenService:Create(textLabel, tweenInfo, {TextTransparency = 1})
-    local statusFade = TweenService:Create(statusLabel, tweenInfo, {TextTransparency = 1})
-    local sliderFade = TweenService:Create(sliderFrame, tweenInfo, {BackgroundTransparency = 1})
-    local fillFade = TweenService:Create(sliderFill, tweenInfo, {BackgroundTransparency = 1})
-    
-    fadeOut:Play()
-    textFade:Play()
-    statusFade:Play()
-    sliderFade:Play()
-    fillFade:Play()
-    
-    fadeOut.Completed:Wait()
-    screenGui:Destroy()
+    fadeOutAndDestroy()
 end
 
 coroutine.wrap(showAnimation)()
