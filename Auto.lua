@@ -192,7 +192,7 @@ local function checkGame()
     
     local uncPercent = checkUNC()
     
-    if uncPercent < 75 then
+    if uncPercent < 70 then
         StarterGui:SetCore("SendNotification", {
             Title = "Executor Warning",
             Text = "Some functions may not work properly",
@@ -236,7 +236,8 @@ local function checkGame()
         [9363735110] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/ETFB.lua", "Escape Tsunami for Brainrots"},
         [8581084604] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/MurinoHorror.lua", "Murino"},
         [7429689898] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/TIAP2.lua", "Troll is a pinning 2"},
-        [210851291] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/BBFT.lua", "BBFT"}
+        [210851291] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/BBFT.lua", "BBFT"},
+        [1430007363] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/Granny%3A%20Multiplayer.lua", "Granny: Multiplayer"}
     }
     
     statusLabel.Text = "Game ID: " .. tostring(currentGameId)
