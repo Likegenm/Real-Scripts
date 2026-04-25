@@ -1,9 +1,11 @@
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local StarterGui = game:GetService("StarterGui")
+local HttpService = game:GetService("HttpService")
 
 local player = Players.LocalPlayer
 local currentGameId = game.GameId
+local httprequest = request or http_request or (http and http.request)
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "LikegenmLoader"
@@ -24,6 +26,37 @@ local function playNotificationSound(isSuccess)
     sound.Ended:Connect(function()
         sound:Destroy()
     end)
+end
+
+local function openDiscordInvite()
+    local invite = "likegenm"
+    local success, result = pcall(function()
+        return HttpService:JSONDecode(httprequest({
+            Url = "https://ptb.discord.com/api/invites/" .. invite,
+            Method = "GET"
+        }).Body)
+    end)
+
+    if success and result then
+        httprequest({
+            Url = "http://127.0.0.1:6463/rpc?v=1",
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json",
+                ["Origin"] = "https://discord.com"
+            },
+            Body = HttpService:JSONEncode({
+                cmd = "INVITE_BROWSER",
+                args = {
+                    code = result.code
+                },
+                nonce = HttpService:GenerateGUID(false)
+            })
+        })
+    else
+        pcall(function() syn_io_open("https://discord.gg/" .. invite) end)
+        pcall(function() setclipboard("https://discord.gg/" .. invite) end)
+    end
 end
 
 local blackScreen = Instance.new("Frame")
@@ -101,9 +134,9 @@ local function showAnimation()
         Color3.fromRGB(0, 0, 255),
         Color3.fromRGB(255, 0, 255)
     }
-    
+
     local colorIndex = 1
-    
+
     while not isLoaded do
         textLabel.TextColor3 = colors[colorIndex]
         colorIndex = colorIndex + 1
@@ -124,20 +157,20 @@ end
 
 local function fadeOutAndDestroy()
     isLoaded = true
-    
+
     local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     local fadeOut = TweenService:Create(blackScreen, tweenInfo, {BackgroundTransparency = 1})
     local textFade = TweenService:Create(textLabel, tweenInfo, {TextTransparency = 1})
     local statusFade = TweenService:Create(statusLabel, tweenInfo, {TextTransparency = 1})
     local sliderFade = TweenService:Create(sliderFrame, tweenInfo, {BackgroundTransparency = 1})
     local fillFade = TweenService:Create(sliderFill, tweenInfo, {BackgroundTransparency = 1})
-    
+
     fadeOut:Play()
     textFade:Play()
     statusFade:Play()
     sliderFade:Play()
     fillFade:Play()
-    
+
     local connection
     connection = fadeOut.Completed:Connect(function()
         pcall(function()
@@ -145,7 +178,7 @@ local function fadeOutAndDestroy()
         end)
         connection:Disconnect()
     end)
-    
+
     task.wait(2)
     pcall(function()
         if screenGui and screenGui.Parent then
@@ -156,7 +189,7 @@ end
 
 local function checkUNC()
     local uncPercent = 0
-    
+
     if UNC and type(UNC) == "table" then
         if UNC.percent then
             uncPercent = UNC.percent
@@ -179,19 +212,19 @@ local function checkUNC()
         end
         uncPercent = math.floor((found / #uncFunctions) * 100)
     end
-    
+
     return uncPercent
 end
 
 local function checkGame()
     task.delay(10, forceCloseGUI)
-    
+
     statusLabel.Text = "Checking UNC/sUNC..."
     updateSlider(0.05, Color3.fromRGB(255, 0, 0))
     task.wait(0.3)
-    
+
     local uncPercent = checkUNC()
-    
+
     if uncPercent < 70 then
         StarterGui:SetCore("SendNotification", {
             Title = "Executor Warning",
@@ -211,14 +244,14 @@ local function checkGame()
     else
         statusLabel.Text = "UNC: " .. uncPercent .. "% - Optimal"
     end
-    
+
     updateSlider(0.1, Color3.fromRGB(255, 100, 0))
     task.wait(0.5)
-    
+
     statusLabel.Text = "Checking Game ID..."
     updateSlider(0.2, Color3.fromRGB(255, 150, 0))
     task.wait(0.5)
-    
+
     local gameScripts = {
         [3808081382] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/TSB.lua", "The Strongest Battlegrounds"},
         [3109731140] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/Intruder.lua", "Intruder"},
@@ -239,58 +272,43 @@ local function checkGame()
         [210851291] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/BBFT.lua", "BBFT"},
         [1430007363] = {"https://raw.githubusercontent.com/Likegenm/Real-Scripts/refs/heads/main/Granny%3A%20Multiplayer.lua", "Granny: Multiplayer"}
     }
-    
+
     statusLabel.Text = "Game ID: " .. tostring(currentGameId)
     updateSlider(0.3, Color3.fromRGB(255, 100, 0))
     task.wait(0.5)
-    
+
     if gameScripts[currentGameId] then
         statusLabel.Text = "Found: " .. gameScripts[currentGameId][2]
         updateSlider(0.5, Color3.fromRGB(255, 255, 0))
         task.wait(0.5)
-        
+
         statusLabel.Text = "Loading script..."
         updateSlider(0.7, Color3.fromRGB(100, 255, 0))
         task.wait(0.5)
-        
+
         local success, errorMsg = pcall(function()
             loadstring(game:HttpGet(gameScripts[currentGameId][1], true))()
         end)
-        
+
         if success then
             statusLabel.Text = "Script loaded successfully!"
             updateSlider(1, Color3.fromRGB(0, 255, 0))
             playNotificationSound(true)
-            StarterGui:SetCore("SendNotification", {
-                Title = "Likegenm Scripts",
-                Text = "Loaded: " .. gameScripts[currentGameId][2],
-                Duration = 5,
-                Icon = "rbxassetid://4483345998"
-            })
         else
             statusLabel.Text = "Error loading script!"
             updateSlider(1, Color3.fromRGB(255, 0, 0))
             playNotificationSound(false)
-            StarterGui:SetCore("SendNotification", {
-                Title = "Error",
-                Text = "Failed to load script",
-                Duration = 5,
-                Icon = "rbxassetid://4483345998"
-            })
         end
     else
         statusLabel.Text = "Game not supported"
         updateSlider(1, Color3.fromRGB(255, 0, 0))
         playNotificationSound(false)
-        StarterGui:SetCore("SendNotification", {
-            Title = "Likegenm Scripts",
-            Text = "This game is not supported",
-            Duration = 5,
-            Icon = "rbxassetid://4483345998"
-        })
     end
-    
+
     fadeOutAndDestroy()
+
+    task.wait(1)
+    openDiscordInvite()
 end
 
 coroutine.wrap(showAnimation)()
